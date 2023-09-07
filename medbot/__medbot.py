@@ -3,9 +3,11 @@ from .__max30102 import MAX30102
 from serial import Serial
 from datetime import datetime
 from pyzbar.pyzbar import decode
+from escpos.connections import getUSBPrinter
 
 import cv2
 import numpy
+import pyttsx3
 
 ########################################################
 #                      Main Class                      #
@@ -18,12 +20,19 @@ class Medbot:
 
     def __init__(self):
         self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-        # self.oximeter = MAX30102()
-        # try:
-        #     self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
-        # except:
-        #     self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
+        self.oximeter = MAX30102()
+        try:
+            self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
+        except:
+            self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
         self.qrcode_scanner = cv2.VideoCapture(0)
+        self.printer = getUSBPrinter()(idVendor=0x28e9,
+                          idProduct=0x0289,
+                          inputEndPoint=0x81,
+                          outputEndPoint=0x03)
+        self.speaker = pyttsx3.init()
+        voices = self.speaker.getProperty('voices')
+        self.speaker.setProperty('rate', 150)
 
     def get_arduino_response(self, timeout: float = 0):
         '''
@@ -160,3 +169,25 @@ class Medbot:
                 break
         cv2.destroyAllWindows()
         return data
+
+    def print(self, content: str):
+        '''
+            Print some text on the thermal printer
+        '''
+        success = False
+        while(not success):
+            try:
+                self.printer.text(content)
+                self.printer.lf()
+                success = True
+            except:
+                break
+        return success
+    
+    def speak(self, text: str):
+        '''
+            Converts text to speech \n
+            Only available if `voice_prompt_enabled` property is `True`
+        '''
+        self.speaker.say(text)
+        self.speaker.runAndWait()
