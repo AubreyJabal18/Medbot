@@ -1,5 +1,6 @@
 import medbot
+import time
 
 bot = medbot.Medbot()
 
-print(bot.start_oximeter())
+print(bot.scan_qrcode())
