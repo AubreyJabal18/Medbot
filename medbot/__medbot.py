@@ -32,7 +32,7 @@ class Medbot:
                           outputEndPoint=0x03)
         self.speaker = pyttsx3.init()
         voices = self.speaker.getProperty('voices')
-        self.speaker.setProperty('rate', 150)
+        self.speaker.setProperty('rate', 160)
 
     def get_arduino_response(self, timeout: float = 0):
         '''
@@ -169,6 +169,9 @@ class Medbot:
                 break
         cv2.destroyAllWindows()
         return data
+    
+
+    
 
     def print(self, content: str):
         '''
