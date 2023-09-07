@@ -14,6 +14,11 @@ canvas.pack()
 
 bg_label = canvas.create_image(0, 0, anchor="nw", image=bg_image1)
 
+logo = Image.open(fr"images/gui_logo.png")
+logo = logo.resize((70, 70), Image.ANTIALIAS)
+logo_tk = ImageTk.PhotoImage(logo)
+logo_label = canvas.create_image(990, 40, image=logo_tk)
+
 second_image = Image.open(fr"images/blue.png")
 second_image = second_image.resize((400, 600), Image.ANTIALIAS)
 second_image_tk = ImageTk.PhotoImage(second_image)

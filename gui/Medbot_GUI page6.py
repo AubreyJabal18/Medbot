@@ -21,6 +21,11 @@ image2 = image2.resize((900, 700), Image.ANTIALIAS)
 image2_tk = ImageTk.PhotoImage(image2)
 image2_label = canvas.create_image(515, 320, image=image2_tk) 
 
+logo = Image.open(fr"images/gui_logo.png")
+logo = logo.resize((70, 70), Image.ANTIALIAS)
+logo_tk = ImageTk.PhotoImage(logo)
+logo_label = canvas.create_image(990, 40, image=logo_tk)
+
 highlight_color = "black" 
 text = "ENHANCED MED-BOT"
 text_label_highlight = canvas.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
