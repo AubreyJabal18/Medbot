@@ -10,7 +10,6 @@ bg_image1 = tk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
 canvas = tk.Canvas(root, width=1030, height=540)
 
-
 canvas.pack()
 
 bg_label = canvas.create_image(0, 0, anchor="nw", image=bg_image1)

@@ -100,5 +100,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     bot = medbot.Medbot()
     app = EnhancedMedBotApp(root, bot)
-    # root.after(700, lambda: bot.speak('Welcome to Enhanced Med-bot'))
+    root.after(1000, lambda: bot.speak('Welcome'))
     root.mainloop()
