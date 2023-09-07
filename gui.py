@@ -11,7 +11,7 @@ class EnhancedMedBotApp:
         root.geometry("1030x540")
         root.resizable(False, False)
 
-        self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4.png")
+        self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
         self.canvas = tk.Canvas(root, width=800, height=480)
         self.canvas.pack()
