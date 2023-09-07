@@ -15,7 +15,7 @@ canvas.pack()
 
 bg_label = canvas.create_image(0, 0, anchor="nw", image=bg_image1)
 
-second_image = Image.open(fr"images/box.png")
+second_image = Image.open(fr"images/blue.png")
 second_image = second_image.resize((400, 600), Image.ANTIALIAS)
 second_image_tk = ImageTk.PhotoImage(second_image)
 second_image_label = canvas.create_image(800, 325, image=second_image_tk) 

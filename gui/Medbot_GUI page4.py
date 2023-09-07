@@ -17,20 +17,21 @@ canvas.pack()
 bg_label = canvas.create_image(0, 0, anchor="nw", image=bg_image1)
 
 image2 = Image.open(fr"images/vitals/1.png")
+# image2 = image2.resize((500, 540), Image.ANTIALIAS)
 image2_tk = ImageTk.PhotoImage(image2)
-image2_label = canvas.create_image(245, 250, image=image2_tk) 
+image2_label = canvas.create_image(310, 250, image=image2_tk) 
 
 image3 = Image.open(fr"images/vitals/2.png")
 image3_tk = ImageTk.PhotoImage(image3)
-image3_label = canvas.create_image(245, 250, image=image3_tk) 
+image3_label = canvas.create_image(345, 250, image=image3_tk) 
 
 image4 = Image.open(fr"images/vitals/3.png")
 image4_tk = ImageTk.PhotoImage(image4)
-image4_label = canvas.create_image(635, 250, image=image4_tk) 
+image4_label = canvas.create_image(770, 250, image=image4_tk) 
 
 image5 = Image.open(fr"images/vitals/4.png")
 image5_tk = ImageTk.PhotoImage(image5)
-image5_label = canvas.create_image(635, 250, image=image5_tk) 
+image5_label = canvas.create_image(800, 250, image=image5_tk) 
 
 box1 = Image.open(fr"images/button (9).png")
 box1_tk = ImageTk.PhotoImage(box1)
@@ -50,11 +51,11 @@ box4_label = canvas.create_image(828, 248, image=box4_tk)
 
 highlight_color = "black" 
 text = "ENHANCED MED-BOT"
-text_label_highlight = canvas.create_text(400 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
-text_label = canvas.create_text(400, 60, text=text, font=("ROBOTO", 30, "bold"), fill="#26B4BE")
+text_label_highlight = canvas.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
+text_label = canvas.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"), fill="#26B4BE")
 
 text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
-text_label = canvas.create_text(400, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
+text_label = canvas.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
 text = "TEMPERATURE"
 text_label = canvas.create_text(128, 205, text=text, font=("ROBOTO", 12, "bold"), fill="black")
