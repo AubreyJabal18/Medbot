@@ -3,20 +3,20 @@ from PIL import Image, ImageTk
 
 root = tk.Tk()
 root.title("Enhanced Medbot")
-root.geometry("800x480")
+root.geometry("1030x540")
 root.resizable(False, False)
 
-image = Image.open("C:\\Users\\elma\\OneDrive\\Desktop\\Medbot\\gui\\images\\Frame 5.png")
-image = image.resize((800, 480), Image.ANTIALIAS)
+image = Image.open(fr"images/Frame 5.png")
+image = image.resize((1030, 540), Image.ANTIALIAS)
 
 bg_image1 = ImageTk.PhotoImage(image)
 
-canvas = tk.Canvas(root, width=800, height=480)
+canvas = tk.Canvas(root, width=1030, height=540)
 canvas.pack()
 
 bg_label = canvas.create_image(0, 0, anchor="nw", image=bg_image1)
 
-image2 = Image.open("C:\\Users\\elma\\OneDrive\\Desktop\\Medbot\\gui\\images\\button (18).png")
+image2 = Image.open(fr"images/button (18).png")
 image2 = image2.resize((800, 700), Image.ANTIALIAS)
 image2_tk = ImageTk.PhotoImage(image2)
 image2_label = canvas.create_image(400, 300, image=image2_tk) 
