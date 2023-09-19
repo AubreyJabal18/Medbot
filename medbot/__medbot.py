@@ -194,7 +194,8 @@ class Medbot:
             `pulse_rate_from_bpm` property to true by direct or by calling
             `set_pulse_rate_from_bpm(True)`.
         '''
-        
+        # start solenoid
+        # detect air_pressure until 0
         while True:
             try:
                 blood_pressure_monitor = Microlife_BTLE()
