@@ -8,6 +8,9 @@ from escpos.connections import getUSBPrinter
 import cv2
 import numpy
 import pyttsx3
+import mysql.connector
+import bcrypt
+import time
 
 ########################################################
 #                      Main Class                      #
@@ -19,12 +22,21 @@ import pyttsx3
 class Medbot:
 
     def __init__(self):
-        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-        self.oximeter = MAX30102()
+        self.database = mysql.connector.connect(
+            host='127.0.0.1',
+            user='medbot',
+            password='medbot',
+            database='medbot'
+        )
+        self.user = None
+        self.cursor = self.database.cursor()
+        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         try:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
+        self.reset_arduino()
+        self.oximeter = MAX30102()
         self.qrcode_scanner = cv2.VideoCapture(0)
         self.printer = getUSBPrinter()(idVendor=0x28e9,
                           idProduct=0x0289,
@@ -32,38 +44,22 @@ class Medbot:
                           outputEndPoint=0x03)
         self.speaker = pyttsx3.init()
         voices = self.speaker.getProperty('voices')
-        self.speaker.setProperty('rate', 160)
+        self.speaker.setProperty('rate', 150)
+
+    #########################################
+    #                                       #
+    #            ARDUINO INTERFACE          #
+    #                                       #
+    #########################################
 
     def get_arduino_response(self, timeout: float = 0):
         '''
             Get the Arduino response if available \n
-            Timeout could be set to listen for response
-            within the timeout duration. If `timeout` is
-            set to 0, function will execute one time.
-            Setting `timeout` to 0 may return empty string
-            and recommended to call in a loop \n
-            Possible response:
-            - `90` False
-            - `91` True
         '''
-        if(timeout <= 0):
-            try:
-                response = self.arduino.readline().decode('utf-8').rstrip()
-            except UnicodeDecodeError:
-                response = self.arduino.readline().decode('utf-8').rstrip()
-        else:
-            start_time = datetime.timestamp(datetime.now())
-            now_time = datetime.timestamp(datetime.now())
-            while((now_time - start_time) < timeout + 0.1):
-                try:
-                    response = self.arduino.readline().decode('utf-8').rstrip()
-                except UnicodeDecodeError:
-                    response = self.arduino.readline().decode('utf-8').rstrip()
-                if(response != ''):
-                    break
-                now_time = datetime.timestamp(datetime.now())
-            if((start_time - now_time) > timeout and response == ''):
-                raise Exception('Timeout reached')
+        try:
+            response = self.arduino.readline().decode('utf-8').rstrip()
+        except UnicodeDecodeError:
+            response = self.arduino.readline().decode('utf-8').rstrip()
         return response
     
     def send_command(self, command: int):
@@ -79,11 +75,112 @@ class Medbot:
                     break
         else:
             raise Exception('Unknown command')
+        
+    def wait_until_operation_completed(self):
+        response = self.get_arduino_response()
+        while response != '90':
+            response = self.get_arduino_response()
 
-    def start_oximeter(self):
-        while True:
-            red, ir = self.oximeter.read_sequential()
-            print(self.oximeter.calc_hr_and_spo2(ir, red))
+    def start_hand_santizer(self, wait_until_completed: bool = False):
+        '''
+        Turn on the ultrasonic sensor.If your hand is detected, the relay will automatically turn on,and the alcohol dispenser will spray onto your hand.
+        ''' 
+        self.send_command(8)
+        if wait_until_completed:
+            self.wait_until_operation_completed()
+        else:
+            self.get_arduino_response()
+    
+    def detect_hand(self):
+        '''
+        detect your your hand using ultrasonic sensor
+        '''
+        self.send_command(6)
+        response = self.get_arduino_response()
+        return response
+    
+
+    def detect_finger(self):
+        '''
+        detect your finger tip using touch sensor
+        '''
+        self.send_command(5)
+        response = self.get_arduino_response()
+        if response == "91":
+            return True
+        else:
+            return False
+
+    def start_motor_forward(self):
+        '''
+        DC motor clockwise
+        '''
+        self.send_command(0)
+        
+    def start_motor_backward(self):
+        '''
+        DC motor counter clockwise
+        '''
+        self.send_command(1)
+        
+    def stop_motor(self):
+        '''
+        Stop DC motor
+        '''
+        self.send_command(2)    
+
+    def lock_oximeter(self):
+        '''
+        close oximeter
+        '''
+        self.send_command(3)
+
+    def unlock_oximeter(self):
+        '''
+        open oximeter
+        '''
+        self.send_command(4)
+
+    def lock_arm(self):
+        '''
+        Lock arm cuff
+        '''
+        self.send_command(0)
+        # fsr_value = self.get_arm_fsr_value()
+        # while fsr_value <= 600:
+        #     fsr_value = self.get_arm_fsr_value()
+        # self.send_command(2)
+    
+    def unlock_arm(self):
+        '''
+        Unlcok arm cuff
+        '''
+        self.send_command(1)
+        time.sleep(2)
+        self.send_command(2)
+        self.send_command
+
+    
+    def start_solenoid(self, wait_until_completed: bool = False):
+        self.send_command(7)
+        '''
+        start blood pressure sensor
+        '''
+        if wait_until_completed:
+            self.wait_until_operation_completed()
+        else:
+            self.get_arduino_response
+
+    def reset_arduino(self):
+        '''
+        Reset Arduino
+        '''
+        self.send_command(9)
+    #########################################
+    #                                       #
+    #           VITAL SIGN SENSORS          #
+    #                                       #
+    #########################################
 
     def start_blood_pressure_monitor(self, retry_on_fail: bool = False):
         '''
@@ -111,31 +208,18 @@ class Medbot:
         pulse_rate = latest_measurement[3] 
         return systolic, diastolic, pulse_rate 
     
-    def start_hand_santizer(self):
-        '''
-        Turn on the ultrasonic sensor.If your hand is detected, the relay will automatically turn on,and the alcohol dispenser will spray onto your hand.
-        ''' 
+    def start_oximeter(self):
+        while True:
+            red, ir = self.oximeter.read_sequential()
+            result = self.oximeter.calc_hr_and_spo2(ir, red)
+            if result[1] and result[3]:
+                return result[2]
     
-    def detect_finger(self, wait_until_detected: bool = False):
-        if wait_until_detected:
-            self.send_command(6)
-            response = self.get_arduino_response()
-            while(response != '90'):
-                response = self.get_arduino_response()
-            return True
-        else:
-            self.send_command(5)
-            response = self.get_arduino_response()
-            if response == '90':
-                return True
-            else:
-                return False
-
-    def lock_oximeter(self):
-        self.send_command(3)
-
-    def unlock_oximeter(self):
-        self.send_command(4)
+    #########################################
+    #                                       #
+    #              LOGIN RELATED            #
+    #                                       #
+    #########################################
 
     def __decodeframe(self, image):
         '''
@@ -170,8 +254,27 @@ class Medbot:
         cv2.destroyAllWindows()
         return data
     
+    def login(self, id, password):
+        self.cursor.execute("SELECT * FROM users where id="+id)
+        result = self.cursor.fetchone()
+        if result:
+            saved_password = result[14]
+            if bcrypt.hashpw(password.encode(), saved_password.encode()) == saved_password.encode():
+                self.user = result
+                return True
+            else:
+                return False
+        else:
+            return False
+        
+    def logout(self):
+        self.user = None
 
-    
+    #########################################
+    #                                       #
+    #                OTHERS                 #
+    #                                       #
+    #########################################
 
     def print(self, content: str):
         '''
@@ -194,3 +297,43 @@ class Medbot:
         '''
         self.speaker.say(text)
         self.speaker.runAndWait()
+
+    def determine_bp(self, systolic, diastolic):
+        if systolic >= 90 and systolic <= 120 and diastolic >= 60 and diastolic <= 80:
+            result = 'normal'
+        elif systolic < 90 and diastolic < 60:
+            result = 'low'
+        else:
+            result = 'high'
+        return result
+    
+    def determine_BO(self, Blood_Oxy):
+        if Blood_Oxy >= 95 and Blood_Oxy <= 100:
+            result = 'normal'
+        elif Blood_Oxy > 100:
+            result = 'high'
+        else:
+            result = 'low'
+        return result
+
+    def determine_pr(self, pulse):
+        if pulse >= 60 and pulse <= 100:
+            result = 'normal'
+        elif pulse >100:
+            result = 'high'
+        else:
+            result = 'low'
+        return result
+
+    def determine_temp(self, temp):
+        if temp >= 33 and temp <= 37:
+            result = 'normal'
+        elif temp > 37:
+            result = 'high'
+        else:
+            result = 'low' 
+        return result
+
+    def save_reading(self, systolic, diastolic, BloodOxy, pulse, temp):
+        query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating,temperature, temperature_rating, pulse_rate, pulse_rate_rating,created_at,updated_at) VALUES({self.user[0]}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {BloodOxy}, "{self.determine_BO(BloodOxy)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
+        self.cursor.execute(query)
