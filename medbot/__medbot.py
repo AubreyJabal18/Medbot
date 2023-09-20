@@ -30,7 +30,7 @@ class Medbot:
         )
         self.user = None
         self.cursor = self.database.cursor()
-        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         try:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:
@@ -215,6 +215,16 @@ class Medbot:
             result = self.oximeter.calc_hr_and_spo2(ir, red)
             if result[1] and result[3]:
                 return result[2]
+
+    def get_temperature(self):
+        self.send_command(11)   
+
+        response = self.get_arduino_response() 
+        while response is None:
+            response = self.get_arduino_response()
+
+        temperature = float (response) 
+        return temperature      
     
     #########################################
     #                                       #
