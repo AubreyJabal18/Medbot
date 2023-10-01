@@ -21,10 +21,11 @@ logo = logo.resize((70, 70), Image.ANTIALIAS)
 logo_tk = ImageTk.PhotoImage(logo)
 logo_label = canvas.create_image(990, 40, image=logo_tk)
 
+#TEMP
 image2 = Image.open(fr"images/vitals/1.png")
 image2 = image2.resize((700, 700), Image.ANTIALIAS)
 image2_tk = ImageTk.PhotoImage(image2)
-image2_label = canvas.create_image(310, 250, image=image2_tk) 
+image2_label = canvas.create_image(820, 250, image=image2_tk) 
 
 image3 = Image.open(fr"images/vitals/2.png")
 image3 = image3.resize((700, 700), Image.ANTIALIAS)
@@ -34,12 +35,12 @@ image3_label = canvas.create_image(320, 250, image=image3_tk)
 image4 = Image.open(fr"images/vitals/3.png")
 image4 = image4.resize((700, 700), Image.ANTIALIAS)
 image4_tk = ImageTk.PhotoImage(image4)
-image4_label = canvas.create_image(820, 250, image=image4_tk) 
+image4_label = canvas.create_image(1070, 250, image=image4_tk) 
 
 image5 = Image.open(fr"images/vitals/4.png")
 image5 = image5.resize((700, 700), Image.ANTIALIAS)
 image5_tk = ImageTk.PhotoImage(image5)
-image5_label = canvas.create_image(820, 250, image=image5_tk) 
+image5_label = canvas.create_image(60, 250, image=image5_tk) 
 
 box1 = Image.open(fr"images/button (9).png")
 box1 = box1.resize((700, 700), Image.ANTIALIAS)
@@ -69,16 +70,16 @@ text_label = canvas.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"),
 text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
 text_label = canvas.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
-text = "TEMPERATURE"
+text = "BLOOD \nPRESSURE"
 text_label = canvas.create_text(160, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
-text = "PULSE RATE"
+text = "OXYGEN \nSATURATION"
 text_label = canvas.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
-text = "OXYGEN \nSATURATION"
+text = "TEMPERATURE"
 text_label = canvas.create_text(670, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
-text = "BLOOD \nPRESSURE"
+text = "PULSE RATE"
 text_label = canvas.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
 root.mainloop()

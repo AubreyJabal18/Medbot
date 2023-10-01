@@ -35,7 +35,7 @@ text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
 text_label = canvas.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
 text = "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
-text_label = canvas.create_text(515, 300, text=text, font=("ROBOTO", 20, "bold italic"), fill="black")
+text_label = canvas.create_text(515, 320, text=text, font=("ROBOTO", 20, "bold italic"), fill="black")
 
 
 

@@ -1,4 +1,5 @@
 import medbot
+from datetime import datetime
 
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -38,6 +39,18 @@ class Root(tk.Tk):
             child.destroy()
         vitals_measuring_page = VitalsMeasuringPage(self, self.medbot)
         vitals_measuring_page.pack()
+    
+    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating):
+        for child in self.winfo_children():
+            child.destroy()
+        vitals_reading_page = VitalsReadingPage(self, self.medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
+        vitals_reading_page.pack()
+
+    def show_thank_you_page(self):
+        for child in self.winfo_children():
+            child.destroy()
+        thank_you_page = ThankYouPage(self, self.medbot)
+        thank_you_page.pack()
 
 class Homepage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
@@ -48,11 +61,6 @@ class Homepage(tk.Canvas):
 
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        self.second_image = Image.open(fr"images/reminder.png")
-        self.second_image = self.second_image.resize((1000, 1000), Image.ANTIALIAS)
-        self.second_image_tk = ImageTk.PhotoImage(self.second_image)
-        self.second_image_label = self.create_image(750, 350, image=self.second_image_tk)
-
         self.third_image = Image.open(fr"images/medbot.png") 
         self.third_image = self.third_image.resize((500, 500), Image.ANTIALIAS)
         self.third_image_tk = ImageTk.PhotoImage(self.third_image)
@@ -61,7 +69,7 @@ class Homepage(tk.Canvas):
         self.logo = Image.open(fr"images/gui_logo.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
-        self.logo_label = self.create_image(990, 40, image=self.logo_tk)
+        self.logo_label = self.create_image(970, 60, image=self.logo_tk)
 
         self.highlight_color = "black"
         text = "WELCOME TO"
@@ -75,7 +83,7 @@ class Homepage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(540, 180, text=text, font=("ROBOTO", 12, "italic"), fill="white")
 
-        self.get_started_button = tk.Button(root, text="Get Started", font=("Helvetica", 16), command=self.on_get_started_click)
+        self.get_started_button = tk.Button(root, text="Get Started", font=("Helvetica", 24), command=self.on_get_started_click)
         self.get_started_button_window = self.create_window(615, 300, anchor="nw", window=self.get_started_button)
     
     def on_get_started_click(self):
@@ -103,7 +111,7 @@ class ScanQRCodePage(tk.Canvas):
         self.logo = Image.open(fr"images/gui_logo.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
-        self.logo_label = self.create_image(990, 40, image=self.logo_tk)
+        self.logo_label = self.create_image(970, 60, image=self.logo_tk)
 
         self.highlight_color = "black"
         text = "WELCOME TO"
@@ -123,10 +131,6 @@ class ScanQRCodePage(tk.Canvas):
         text = "Want to check your vital sign?"
         self.text_label = self.create_text(470, 490, text=text, font=("ROBOTO", 12, "bold"), fill="white")
 
-        self.qr_code_text = "Scan Your QR Code"
-        self.qr_code_text_label = self.create_text(700, 490, text=self.qr_code_text, font=("Helvetica", 12, "underline italic"), fill="white")
-        self.tag_bind(self.qr_code_text_label, "<Button-1>", self.on_qr_code_click) 
-
         self.qr_code_window = None
         self.qr_code_bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4.png")
 
@@ -136,9 +140,11 @@ class ScanQRCodePage(tk.Canvas):
         self.medbot.speak('Hi')
         self.medbot.speak('I am Enhanced Med-Bot')
         self.medbot.speak('Youre All in One Healthcare Budddy')
-        self.medbot.speak('Please scan your qrcode')
+        self.medbot.speak('To proceed, please scan your qrcode')
 
-    def on_qr_code_click(self, event):
+        self.after(50, self.on_qr_code_click)
+
+    def on_qr_code_click(self):
         qr_data = self.medbot.scan_qrcode()
         credentials = qr_data.split(' ')
         if credentials[0] != 'medbot':
@@ -209,6 +215,12 @@ class HandSanitiationPage(tk.Canvas):
         text = "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
         self.text_label = self.create_text(425, 245, text=text, font=("Helvetica", 18), fill="black")
 
+        self.after(500, self.welcome)
+    
+    def welcome(self):
+        self.medbot.speak('Please put your hands in front of the sanitizer')
+        
+        self.after(500, self.hand_sanitation)
 
     def hand_sanitation(self):
         hand_position = self.medbot.detect_hand()
@@ -223,63 +235,64 @@ class HandSanitiationPage(tk.Canvas):
         # Start sanitizer
         self.medbot.start_hand_santizer(wait_until_completed=True)
 
-        self.medbot.speak('Sanitizing complete. Please position your arm correctly')
-        self.medbot.speak('Please rest your arm properly')
+        self.medbot.speak('Sanitizing complete')
+        
+        self.master.show_vitals_measuring_page()
 
 class VitalsMeasuringPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
 
-        image = Image.open(fr"images/Frame 5.png")
-        image = image.resize((1030, 540), Image.ANTIALIAS)
-        bg_image1 = ImageTk.PhotoImage(image)
-        self.bg_label = self.create_image(0, 0, anchor="nw", image=bg_image1)
+        self.image = Image.open(fr"images/Frame 5.png")
+        self.image = self.image.resize((1030, 540), Image.ANTIALIAS)
+        self.bg_image1 = ImageTk.PhotoImage(self.image)
+        self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        logo = Image.open(fr"images/gui_logo.png")
-        logo = logo.resize((70, 70), Image.ANTIALIAS)
-        logo_tk = ImageTk.PhotoImage(logo)
-        self.logo_label = self.create_image(990, 40, image=logo_tk)
+        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
+        self.logo_tk = ImageTk.PhotoImage(self.logo)
+        self.logo_label = self.create_image(990, 40, image=self.logo_tk)
 
-        image2 = Image.open(fr"images/vitals/1.png")
-        image2 = image2.resize((700, 700), Image.ANTIALIAS)
-        image2_tk = ImageTk.PhotoImage(image2)
-        self.image2_label = self.create_image(310, 250, image=image2_tk) 
+        self.image2 = Image.open(fr"images/vitals/1.png")
+        self.image2 = self.image2.resize((700, 700), Image.ANTIALIAS)
+        self.image2_tk = ImageTk.PhotoImage(self.image2)
+        self.image2_label = self.create_image(820, 250, image=self.image2_tk) 
 
-        image3 = Image.open(fr"images/vitals/2.png")
-        image3 = image3.resize((700, 700), Image.ANTIALIAS)
-        image3_tk = ImageTk.PhotoImage(image3)
-        self.image3_label = self.create_image(320, 250, image=image3_tk) 
+        self.image3 = Image.open(fr"images/vitals/2.png")
+        self.image3 = self.image3.resize((700, 700), Image.ANTIALIAS)
+        self.image3_tk = ImageTk.PhotoImage(self.image3)
+        self.image3_label = self.create_image(320, 250, image=self.image3_tk) 
 
-        image4 = Image.open(fr"images/vitals/3.png")
-        image4 = image4.resize((700, 700), Image.ANTIALIAS)
-        image4_tk = ImageTk.PhotoImage(image4)
-        self.image4_label = self.create_image(820, 250, image=image4_tk) 
+        self.image4 = Image.open(fr"images/vitals/3.png")
+        self.image4 = self.image4.resize((700, 700), Image.ANTIALIAS)
+        self.image4_tk = ImageTk.PhotoImage(self.image4)
+        self.image4_label = self.create_image(1070, 250, image=self.image4_tk) 
 
-        image5 = Image.open(fr"images/vitals/4.png")
-        image5 = image5.resize((700, 700), Image.ANTIALIAS)
-        image5_tk = ImageTk.PhotoImage(image5)
-        self.image5_label = self.create_image(820, 250, image=image5_tk) 
+        self.image5 = Image.open(fr"images/vitals/4.png")
+        self.image5 = self.image5.resize((700, 700), Image.ANTIALIAS)
+        self.image5_tk = ImageTk.PhotoImage(self.image5)
+        self.image5_label = self.create_image(60, 250, image=self.image5_tk)
 
-        box1 = Image.open(fr"images/button (9).png")
-        box1 = box1.resize((700, 700), Image.ANTIALIAS)
-        box1_tk = ImageTk.PhotoImage(box1)
-        self.box1_label = self.create_image(310, 248, image=box1_tk) 
+        self.box1 = Image.open(fr"images/button (9).png")
+        self.box1 = self.box1.resize((700, 700), Image.ANTIALIAS)
+        self.box1_tk = ImageTk.PhotoImage(self.box1)
+        self.box1_label = self.create_image(310, 248, image=self.box1_tk) 
 
-        box2 = Image.open(fr"images/button (9).png")
-        box2 = box2.resize((700, 700), Image.ANTIALIAS)
-        box2_tk = ImageTk.PhotoImage(box2)
-        self.box2_label = self.create_image(570, 248, image=box2_tk) 
+        self.box2 = Image.open(fr"images/button (9).png")
+        self.box2 = self.box2.resize((700, 700), Image.ANTIALIAS)
+        self.box2_tk = ImageTk.PhotoImage(self.box2)
+        self.box2_label = self.create_image(570, 248, image=self.box2_tk) 
 
-        box3 = Image.open(fr"images/button (9).png")
-        box3 = box3.resize((700, 700), Image.ANTIALIAS)
-        box3_tk = ImageTk.PhotoImage(box3)
-        self.box3_label = self.create_image(820, 248, image=box3_tk) 
+        self.box3 = Image.open(fr"images/button (9).png")
+        self.box3 = self.box3.resize((700, 700), Image.ANTIALIAS)
+        self.box3_tk = ImageTk.PhotoImage(self.box3)
+        self.box3_label = self.create_image(820, 248, image=self.box3_tk) 
 
-        box4 = Image.open(fr"images/button (9).png")
-        box4 = box4.resize((700, 700), Image.ANTIALIAS)
-        box4_tk = ImageTk.PhotoImage(box4)
-        self.box4_label = self.create_image(1070, 248, image=box4_tk)
+        self.box4 = Image.open(fr"images/button (9).png")
+        self.box4 = self.box4.resize((700, 700), Image.ANTIALIAS)
+        self.box4_tk = ImageTk.PhotoImage(self.box4)
+        self.box4_label = self.create_image(1070, 248, image=self.box4_tk)
 
         highlight_color = "black" 
         text = "ENHANCED MED-BOT"
@@ -289,18 +302,273 @@ class VitalsMeasuringPage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
-        text = "TEMPERATURE"
+        text = "BLOOD \nPRESSURE"
         self.text_label = self.create_text(160, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
-        text = "PULSE RATE"
+        text = "OXYGEN \nSATURATION"
         self.text_label = self.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
-        text = "OXYGEN \nSATURATION"
+        text = "TEMPERATURE"
         self.text_label = self.create_text(670, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
-        text = "BLOOD \nPRESSURE"
+        text = "PULSE RATE"
         self.text_label = self.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
+       
+        self.after(500, self.welcome)
+    
+    def welcome(self):
+        self.medbot.speak('Proceeding to vital signs measurement. Please position your arm correctly')
+        self.medbot.speak('Please rest your arm properly')
+
+        self.after(500)
+
+        # # Detect arm position
+        # arm_position = self.medbot.detect_arm()
+        # while not arm_position:
+        #     self.medbot.speak('Your arm is not detected')
+        #     arm_position = bot.detect_arm()
+        # self.medbot.speak('Your arm was detected')  
+
+        self.after(500)
+
+        self.medbot.speak('Please insert your finger on the oximeter')
+
+        # Detect finger position until okay
+        finger_position = self.medbot.detect_finger()
+        while not finger_position:
+            self.medbot.speak('Finger not detected')
+            finger_position = self.medbot.detect_finger()
+
+        #stepper clockwise
+        self.medbot.lock_oximeter()
+        self.medbot.speak('Locking oximeter, please do not remove your finger')
+
+        self.medbot.speak('Please stay still. Now getting your Blood Pressure and Pulse Rate')
+
+        # self.medbot.start_solenoid()
+
+        # Get Blood Pressure
+        systolic, diastolic, pulse_rate = self.medbot.start_blood_pressure_monitor()
+        bp_rating = self.medbot.determine_bp(systolic, diastolic)
+        print(systolic, diastolic)
+        print(bp_rating)
+
+        # Update the image of the box for Blood Pressure
+        self.itemconfig(self.box1_label, image=(fr"images/button (9).png"))  # Replace 'new_image' with the image you want
+
+        # Get Pulse Rate
+        pr_rating = self.medbot.determine_pr(pulse_rate)
+        print(pulse_rate)
+        print(pr_rating)
+        
+        self.after(500)
+
+        # Get Temperature
+        self.medbot.speak('Now getting your Temperature Measurement')
+        temperature = self.medbot.get_temperature()
+        temp_rating = self.medbot.determine_temp(temperature)
+        print(temperature)
+        print(temp_rating)
+
+        self.medbot.speak('Please stay still. Now getting your oxygen saturation')
+
+        # Get Oxygen Saturation
+        oxygen_saturation = self.medbot.start_oximeter()   
+        os_rating = self.medbot.determine_os(oxygen_saturation)
+        print(oxygen_saturation) 
+        print(os_rating)
+
+        # self.after(500)
+
+        self.medbot.speak('Vital Signs Measurement has Completed')
+
+        self.after(500)
+        
+        self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
+
+
+class VitalsReadingPage(tk.Canvas):
+    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating, **kwargs):
+        super().__init__(master = root, width=1030, height=540, **kwargs)
+        self.medbot = bot
+        self.systolic = systolic
+        self.diastolic = diastolic
+        self.pulse_rate = pulse_rate
+        self.temperature = temperature
+        self.oxygen_saturation = oxygen_saturation
+        self.bp_rating = bp_rating
+        self.pr_rating = pr_rating
+        self.temp_rating = temp_rating
+        self.os_rating = os_rating
+
+        self.image = Image.open(fr"images/Frame 5.png")
+        self.image = self.image.resize((1030, 540), Image.ANTIALIAS)
+
+        self.bg_image1 = ImageTk.PhotoImage(self.image)
+
+        self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
+
+        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
+        self.logo_tk = ImageTk.PhotoImage(self.logo)
+        self.logo_label = self.create_image(990, 40, image=self.logo_tk)
+
+        self.image2 = Image.open(fr"images/vitals/7.png")
+        self.image2 = self.image2.resize((700, 700), Image.ANTIALIAS)
+        self.image2_tk = ImageTk.PhotoImage(self.image2)
+        self.image2_label = self.create_image(500, 325, image=self.image2_tk) 
+
+        self.image3 = Image.open(fr"images/vitals/8.png")
+        self.image3 = self.image3.resize((700, 700), Image.ANTIALIAS)
+        self.image3_tk = ImageTk.PhotoImage(self.image3)
+        self.image3_label = self.create_image(550, 330, image=self.image3_tk) 
+
+        self.image4 = Image.open(fr"images/vitals/9.png")
+        self.image4 = self.image4.resize((700, 700), Image.ANTIALIAS)
+        self.image4_tk = ImageTk.PhotoImage(self.image4)
+        self.image4_label = self.create_image(500, 300, image=self.image4_tk) 
+
+        self.image5 = Image.open(fr"images/vitals/10.png")
+        self.image5 = self.image5.resize((700, 700), Image.ANTIALIAS)
+        self.image5_tk = ImageTk.PhotoImage(self.image5)
+        self.image5_label = self.create_image(550, 300, image=self.image5_tk) 
+
+        self.image6 = Image.open(fr"images/button (13).png")
+        self.image6 = self.image6.resize((800, 900), Image.ANTIALIAS)
+        self.image6_tk = ImageTk.PhotoImage(self.image6)
+        self.image6_label = self.create_image(515, 470, image=self.image6_tk)
+
+        highlight_color = "black" 
+        text = "ENHANCED MED-BOT"
+        self.text_label_highlight = self.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
+        self.text_label = self.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"), fill="#26B4BE")
+
+        text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
+        self.text_label = self.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
+
+        text = "BLOOD \nPRESSURE"
+        self.text_label = self.create_text(370, 195, text=text, font=("ROBOTO", 12, "bold"), fill="black")
+
+        text = "OXYGEN \nSATURATION"
+        self.text_label = self.create_text(740, 195, text=text, font=("ROBOTO", 12, "bold"), fill="black")
+
+        text = "TEMPERATURE"
+        self.text_label = self.create_text(370, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
+
+        text = "PULSE"
+        self.text_label = self.create_text(740, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
+
+
+        blood_pressure_reading = f"{systolic}/{diastolic}  mmHg" 
+        self.blood_pressure_label = self.create_text(360, 230, text=blood_pressure_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
+
+
+        oxygen_saturation_reading = f"{oxygen_saturation}%" 
+        self.oxygen_saturation_label = self.create_text(740, 230, text=oxygen_saturation_reading, font=("ROBOTO", 14, "underline bold"), fill="black")            
+
+        temperature_reading = f"{temperature}°C" 
+        self.temperature_label = self.create_text(360, 385, text=temperature_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
+
+        pulse_rate_reading = f"{pulse_rate} bpm"
+        self.pulse_rate_label = self.create_text(740, 385, text=pulse_rate_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
+
+        text = "PRINT RESULT?"
+        self.text_label = self.create_text(455, 470, text=text, font=("ROBOTO", 12, "bold"), fill="white")
+
+        self.after(1000, self.after_init)
+    
+    def after_init(self):
+        self.medbot.speak('Here are your vital measurement!')
+        self.medbot.speak(f'Your blood pressure is {self.systolic} over {self.diastolic} MMHG and it is {self.bp_rating}') 
+        self.medbot.speak(f'Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}')
+        self.medbot.speak(f'Your temperature is {self.temperature} celcius and it is {self.temp_rating}')
+        self.medbot.speak(f'Your pulse rate is {self.pulse_rate} BPM and it is {self.pr_rating}')
+
+        self.medbot.speak('Do you want to print your vital sign measurement?')
+        self.medbot.speak('Please click the button to print your results.')
+
+         # Create the "Red" button
+        self.red_button = tk.Button(root, text="NO", font=("Helvetica", 10), command=self.on_red_button_click, bg="red")
+        self.red_button_window = self.create_window(300, 470, window=self.red_button)
+
+        # Create the "Green" button
+        self.green_button = tk.Button(root, text="YES", font=("Helvetica", 10), command=self.on_green_button_click, bg="green")
+        self.green_button_window = self.create_window(600, 470, window=self.green_button)
+
+    def on_red_button_click(self, event):
+        self.master.show_thank_you_page()
+    
+    def on_green_button_click(self, event):
+
+        message = f'''     
+   
+    MARINDUQUE STATE COLLEGE
+     TANZA, BOAC, MARIDUQUE
+_________________________________
+
+        ENHANCED MED-BOT
+    "YOU'RE ULTIMATE ALL-ONE 
+        HEALTHCARE BUDDY"    
+
+    Here are your vital sign 
+      measurement results.
+
+Name: {bot.user[1]}, {bot.user[2]}
+Blood Pressure: {self.systolic}/{self.diastolic} mmHg ({self.bp_rating})
+Oxygen Saturation:  {self.oxygen_saturation} % ({self.os_rating})
+Temperature: {self.temperature} C ({self.temp_rating})
+Pulse Rate: {self.pulse_rate} bpm ({self.pr_rating})
+
+_________________________________
+      THANK YOU FOR USING 
+        ENHANCED MED-BOT
+
+{datetime.now()}
+
+
+    '''
+        self.medbot.print(message) 
+    
+        self.master.show_thank_you_page()
+
+class ThankYouPage(tk.Canvas):
+    def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
+        super().__init__(master = root, width=1030, height=540, **kwargs)
+        self.medbot = bot
+
+        self.image = Image.open(fr"images/Frame 5.png")
+        self.image =  self.image.resize((1030, 540), Image.ANTIALIAS)
+
+        self.bg_image1 = ImageTk.PhotoImage(self.image)
+
+        self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
+
+        self.image2 = Image.open(fr"images/button (18).png")
+        self.image2 = self.image2.resize((900, 700), Image.ANTIALIAS)
+        self.image2_tk = ImageTk.PhotoImage(self.image2)
+        self.image2_label = self.create_image(515, 320, image=self.image2_tk) 
+
+        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
+        self.logo_tk = ImageTk.PhotoImage(self.logo)
+        self.logo_label = self.create_image(990, 40, image=self.logo_tk)
+
+        highlight_color = "black" 
+        text = "ENHANCED MED-BOT"
+        self.text_label_highlight = self.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
+        self.text_label = self.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"), fill="#26B4BE")
+
+        text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
+        self.text_label = self.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
+
+        text = "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
+        self.text_label = self.create_text(515, 320, text=text, font=("ROBOTO", 20, "bold italic"), fill="black")
+
+        self.after(1000, self.thankyou)
+    
+    def thankyou(self):   
+        self.medbot.speak('Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.')
 
 if __name__ == "__main__":
     bot = medbot.Medbot()

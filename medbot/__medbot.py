@@ -30,11 +30,12 @@ class Medbot:
         )
         self.user = None
         self.cursor = self.database.cursor()
-        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
         try:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
+
         self.reset_arduino()
         self.oximeter = MAX30102()
         self.qrcode_scanner = cv2.VideoCapture(0)
@@ -109,7 +110,7 @@ class Medbot:
         if response == "91":
             return True
         else:
-            return False
+            return False   
 
     def start_motor_forward(self):
         '''
@@ -145,22 +146,65 @@ class Medbot:
         '''
         Lock arm cuff
         '''
-        self.send_command(0)
-        # fsr_value = self.get_arm_fsr_value()
+        self.send_command(12)
+        response = self.get_arduino_response()
+
+        if response <= '200':
+           response = self.get_arduino_response()
+        else:
+            response = self.get_arduino_response()
+            self.send_command(2)
+        return response
+        
+
+
+
+
+        # self.send_command(12)
+        # if wait_until_completed:
+        #     self.wait_until_operation_completed()
+            
+        # else:
+        #     self.get_arduino_response()
+
+
+        # self.send_command(13)
+        # fsr_value = self.get_arduino_response()
         # while fsr_value <= 600:
-        #     fsr_value = self.get_arm_fsr_value()
+        #     fsr_value = self.get_arduino_response()
         # self.send_command(2)
     
     def unlock_arm(self):
         '''
-        Unlcok arm cuff
+        Unlock arm cuff
         '''
         self.send_command(1)
         time.sleep(2)
         self.send_command(2)
         self.send_command
 
-    
+    def detect_arm(self):
+        '''
+        Unlock arm cuff
+        '''
+        self.send_command(13)
+        response = self.get_arduino_response()
+        if response == "91":
+            return True
+        else:
+            return False    
+
+    def detect_arm_bpm(self):
+        '''
+        detect your using touch sensor
+        '''
+        self.send_command(14)
+        response = self.get_arduino_response()
+        if response == "91":
+            return True
+        else:
+            return False 
+        
     def start_solenoid(self, wait_until_completed: bool = False):
         self.send_command(7)
         '''
@@ -214,13 +258,14 @@ class Medbot:
             red, ir = self.oximeter.read_sequential()
             result = self.oximeter.calc_hr_and_spo2(ir, red)
             if result[1] and result[3]:
-                return result[2]
+                spO2 = int (result[2])
+                return spO2
 
     def get_temperature(self):
         self.send_command(11)   
 
         response = self.get_arduino_response() 
-        while response is None:
+        while not response:
             response = self.get_arduino_response()
 
         temperature = float (response) 
@@ -318,10 +363,10 @@ class Medbot:
             result = 'high'
         return result
     
-    def determine_BO(self, Blood_Oxy):
-        if Blood_Oxy >= 95 and Blood_Oxy <= 100:
+    def determine_os(self, oxy_sat):
+        if oxy_sat >= 95 and oxy_sat <= 100:
             result = 'normal'
-        elif Blood_Oxy > 100:
+        elif oxy_sat > 100:
             result = 'high'
         else:
             result = 'low'
@@ -345,6 +390,6 @@ class Medbot:
             result = 'low' 
         return result
 
-    def save_reading(self, systolic, diastolic, BloodOxy, pulse, temp):
-        query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating,temperature, temperature_rating, pulse_rate, pulse_rate_rating,created_at,updated_at) VALUES({self.user[0]}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {BloodOxy}, "{self.determine_BO(BloodOxy)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
+    def save_reading(self, systolic, diastolic, oxy_sat, pulse, temp):
+        query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating,temperature, temperature_rating, pulse_rate, pulse_rate_rating,created_at,updated_at) VALUES({self.user[0]}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {oxy_sat}, "{self.determine_os(oxy_sat)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
         self.cursor.execute(query)
