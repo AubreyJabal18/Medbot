@@ -294,6 +294,10 @@ class VitalsMeasuringPage(tk.Canvas):
         self.box4_tk = ImageTk.PhotoImage(self.box4)
         self.box4_label = self.create_image(1070, 248, image=self.box4_tk)
 
+        self.box5 = Image.open(fr"images/button (19).png")
+        self.box5 = self.box5.resize((700, 700), Image.ANTIALIAS)
+        self.box5_tk = ImageTk.PhotoImage(self.box5)
+        
         highlight_color = "black" 
         text = "ENHANCED MED-BOT"
         self.text_label_highlight = self.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
@@ -354,14 +358,18 @@ class VitalsMeasuringPage(tk.Canvas):
         print(systolic, diastolic)
         print(bp_rating)
 
+
         # Update the image of the box for Blood Pressure
-        self.itemconfig(self.box1_label, image=(fr"images/button (9).png"))  # Replace 'new_image' with the image you want
+        self.itemconfig(self.box1_label, image=self.box5_tk)
+
+        self.after(500)
 
         # Get Pulse Rate
         pr_rating = self.medbot.determine_pr(pulse_rate)
         print(pulse_rate)
         print(pr_rating)
         
+
         self.after(500)
 
         # Get Temperature
@@ -379,7 +387,7 @@ class VitalsMeasuringPage(tk.Canvas):
         print(oxygen_saturation) 
         print(os_rating)
 
-        # self.after(500)
+        self.after(500)
 
         self.medbot.speak('Vital Signs Measurement has Completed')
 
@@ -439,6 +447,14 @@ class VitalsReadingPage(tk.Canvas):
         self.image6_tk = ImageTk.PhotoImage(self.image6)
         self.image6_label = self.create_image(515, 470, image=self.image6_tk)
 
+        # Create the "Red" button
+        self.red_button = tk.Button(self, text="NO", font=("Helvetica", 10), command=self.on_red_button_click, bg="red")
+        self.red_button_window = self.create_window(300, 470, window=self.red_button)
+
+        # Create the "Green" button
+        self.green_button = tk.Button(self, text="YES", font=("Helvetica", 10), command=self.on_green_button_click, bg="green")
+        self.green_button_window = self.create_window(600, 470, window=self.green_button)
+
         highlight_color = "black" 
         text = "ENHANCED MED-BOT"
         self.text_label_highlight = self.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
@@ -488,18 +504,10 @@ class VitalsReadingPage(tk.Canvas):
         self.medbot.speak('Do you want to print your vital sign measurement?')
         self.medbot.speak('Please click the button to print your results.')
 
-         # Create the "Red" button
-        self.red_button = tk.Button(root, text="NO", font=("Helvetica", 10), command=self.on_red_button_click, bg="red")
-        self.red_button_window = self.create_window(300, 470, window=self.red_button)
-
-        # Create the "Green" button
-        self.green_button = tk.Button(root, text="YES", font=("Helvetica", 10), command=self.on_green_button_click, bg="green")
-        self.green_button_window = self.create_window(600, 470, window=self.green_button)
-
-    def on_red_button_click(self, event):
+    def on_red_button_click(self):
         self.master.show_thank_you_page()
     
-    def on_green_button_click(self, event):
+    def on_green_button_click(self):
 
         message = f'''     
    
@@ -528,7 +536,7 @@ _________________________________
 
 
     '''
-        self.medbot.print(message) 
+        self.medbot.print(message)
     
         self.master.show_thank_you_page()
 
