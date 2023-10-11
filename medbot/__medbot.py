@@ -37,7 +37,7 @@ class Medbot:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
 
         self.reset_arduino()
-        self.oximeter = MAX30102()
+        # self.oximeter = MAX30102()
         self.qrcode_scanner = cv2.VideoCapture(0)
         self.printer = getUSBPrinter()(idVendor=0x28e9,
                           idProduct=0x0289,
@@ -253,13 +253,13 @@ class Medbot:
         pulse_rate = latest_measurement[3] 
         return systolic, diastolic, pulse_rate 
     
-    def start_oximeter(self):
-        while True:
-            red, ir = self.oximeter.read_sequential()
-            result = self.oximeter.calc_hr_and_spo2(ir, red)
-            if result[1] and result[3]:
-                spO2 = int (result[2])
-                return spO2
+    # def start_oximeter(self):
+    #     while True:
+    #         red, ir = self.oximeter.read_sequential()
+    #         result = self.oximeter.calc_hr_and_spo2(ir, red)
+    #         if result[1] and result[3]:
+    #             spO2 = int (result[2])
+    #             return spO2
 
     def get_temperature(self):
         self.send_command(11)   
