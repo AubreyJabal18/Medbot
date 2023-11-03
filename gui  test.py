@@ -51,10 +51,10 @@ class Root(tk.Tk):
         vitals_measuring_page = VitalsMeasuringPage(self, self.medbot)
         vitals_measuring_page.pack()
     
-    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature, bp_rating, pr_rating, temp_rating):
+    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature,oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating):
         for child in self.winfo_children():
             child.destroy()
-        vitals_reading_page = VitalsReadingPage(self, self.medbot, systolic, diastolic, pulse_rate, temperature, bp_rating, pr_rating, temp_rating)
+        vitals_reading_page = VitalsReadingPage(self, self.medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
         vitals_reading_page.pack()
 
     def show_thank_you_page(self):
@@ -390,11 +390,11 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.medbot.speak('Please stay still.')
 
-        # # Get Oxygen Saturation
-        # oxygen_saturation = self.medbot.start_oximeter()   
-        # os_rating = self.medbot.determine_os(oxygen_saturation)
-        # print(oxygen_saturation) 
-        # print(os_rating)
+        # Get Oxygen Saturation
+        oxygen_saturation = self.medbot.start_oximeter()   
+        os_rating = self.medbot.determine_os(oxygen_saturation)
+        print(oxygen_saturation) 
+        print(os_rating)
 
         self.after(500)
 
@@ -406,18 +406,18 @@ class VitalsMeasuringPage(tk.Canvas):
 
 
 class VitalsReadingPage(tk.Canvas):
-    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, bp_rating, pr_rating, temp_rating, **kwargs):
+    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating,**kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
         self.systolic = systolic
         self.diastolic = diastolic
         self.pulse_rate = pulse_rate
         self.temperature = temperature
-        # self.oxygen_saturation = oxygen_saturation
+        self.oxygen_saturation = oxygen_saturation
         self.bp_rating = bp_rating
         self.pr_rating = pr_rating
         self.temp_rating = temp_rating
-        # self.os_rating = os_rating
+        self.os_rating = os_rating
 
         self.image = Image.open(fr"images/Frame 5.png")
         self.image = self.image.resize((1030, 540), Image.ANTIALIAS)
@@ -489,8 +489,8 @@ class VitalsReadingPage(tk.Canvas):
         self.blood_pressure_label = self.create_text(360, 230, text=blood_pressure_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
 
 
-        # oxygen_saturation_reading = f"%" 
-        # self.oxygen_saturation_label = self.create_text(740, 230, text=oxygen_saturation_reading, font=("ROBOTO", 14, "underline bold"), fill="black")            
+        oxygen_saturation_reading = f"%" 
+        self.oxygen_saturation_label = self.create_text(740, 230, text=oxygen_saturation_reading, font=("ROBOTO", 14, "underline bold"), fill="black")            
 
         temperature_reading = f"{temperature}°C" 
         self.temperature_label = self.create_text(360, 385, text=temperature_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
@@ -506,7 +506,7 @@ class VitalsReadingPage(tk.Canvas):
     def after_init(self):
         self.medbot.speak('Here are your vital measurement!')
         self.medbot.speak(f'Your blood pressure is {self.systolic} over {self.diastolic} MMHG and it is {self.bp_rating}') 
-        # self.medbot.speak(f'Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}')
+        self.medbot.speak(f'Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}')
         self.medbot.speak(f'Your temperature is {self.temperature} celcius and it is {self.temp_rating}')
         self.medbot.speak(f'Your pulse rate is {self.pulse_rate} BPM and it is {self.pr_rating}')
 
@@ -533,6 +533,7 @@ _________________________________
 
 Name: {bot.user[1]}, {bot.user[2]}
 Blood Pressure: {self.systolic}/{self.diastolic} mmHg ({self.bp_rating})
+Oxygen Saturation: {self.oxygen_saturation} % ({self.os_rating})
 Temperature: {self.temperature} C ({self.temp_rating})
 Pulse Rate: {self.pulse_rate} bpm ({self.pr_rating})
 
