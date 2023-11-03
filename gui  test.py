@@ -101,7 +101,7 @@ class Homepage(tk.Canvas):
         self.get_started_button_window = self.create_window(615, 300, anchor="nw", window=self.get_started_button)
 
         # Create a label
-        self.label = tk.Label(root, text="Click the Toggle Button to switch language")
+        self.label = tk.Label(root, text="Click the Button to switch language")
         self.label.pack(side='bottom', pady=5)
 
         self.eng_button = tk.Button(root, text="ENG",command=self.toggle_language, width=5, height=2)
