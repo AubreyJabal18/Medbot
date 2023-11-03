@@ -5,6 +5,9 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class Root(tk.Tk):
+    # Initialize the GUI
+    current_language = "English"
+
     def __init__(self, bot):
         super().__init__()
         self.medbot = bot
@@ -67,7 +70,7 @@ class Homepage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(root, width=1030, height=540, **kwargs)
         self.medbot = bot
-
+     
         self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
@@ -96,7 +99,42 @@ class Homepage(tk.Canvas):
 
         self.get_started_button = tk.Button(root, text="Get Started", font=("Helvetica", 24), command=self.on_get_started_click)
         self.get_started_button_window = self.create_window(615, 300, anchor="nw", window=self.get_started_button)
-    
+
+        # Create a label
+        self.label = tk.Label(root, text="Click the Toggle Button to switch language")
+        self.label.pack(side='bottom', pady=5)
+
+        self.eng_button = tk.Button(root, text="ENG",command=self.toggle_language, width=5, height=2)
+        self.eng_button.place(x=860, y=420)
+        self.eng_button.config(font=("Helvetica", 12))
+
+        if Root.current_language == "English":
+            self.eng_button.config(state=tk.DISABLED)
+
+        self.fil_button = tk.Button(root, text="FIL", command=self.toggle_language, width=5, height=2)
+        self.fil_button.place(x=920, y=420)
+        self.fil_button.config(font=("Helvetica", 12))
+
+        if Root.current_language == "Filipino":
+            self.fil_button.config(state=tk.DISABLED)
+
+    def toggle_language(self):
+        if Root.current_language == "English":
+            Root.current_language = "Filipino"
+            self.eng_button.config(state=tk.NORMAL)
+            self.fil_button.config(state=tk.DISABLED)
+        else:
+            Root.current_language = "English"
+            self.fil_button.config(state=tk.NORMAL)
+            self.eng_button.config(state=tk.DISABLED)
+        self.update_language()
+
+    def update_language(self):
+        if Root.current_language == "English":
+            self.label.config(text="Click the Button to switch language")
+        else:
+            self.label.config(text="Pindutin ang Button para magpalit ng Wika")
+
     def on_get_started_click(self):
         self.master.show_scan_page()
 
