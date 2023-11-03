@@ -1,7 +1,6 @@
 import medbot
 from datetime import datetime
 import yaml
-
 import tkinter as tk
 from PIL import Image, ImageTk
 
@@ -14,6 +13,9 @@ class Root(tk.Tk):
         self.resizable(False, False)
 
         self.show_homepage()
+
+        self.load_config()
+        self.language = self.config['active_language']
 
         self.mainloop()
 
@@ -146,10 +148,8 @@ class ScanQRCodePage(tk.Canvas):
         self.after(500, self.welcome)
         
     def welcome(self):
-        self.medbot.speak('Hi')
-        self.medbot.speak('I am Enhanced Med-Bot')
-        self.medbot.speak('Youre All in One Healthcare Budddy')
-        self.medbot.speak('To proceed, please scan your qrcode')
+        self.medbot.speak(self.root.config['intro_prompt']['welcome'][self.root.language])
+        self.medbot.speak(self.root.config['intro_prompt']['proceed'][self.root.language])
 
         self.after(50, self.on_qr_code_click)
 
