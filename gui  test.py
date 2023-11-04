@@ -212,7 +212,9 @@ class ScanQRCodePage(tk.Canvas):
             credentials = qr_data.split(' ')
             
             if ready and credentials[0] != 'medbot':
-                self.medbot.speak('Wrong QRCode')
+    
+                self.medbot.speak(self.root.config['scan_prompt']['fail_qrcode'][self.root.language])
+
                 credentials[0] = None
                 ready = False
                 last_scaned = datetime.datetime.now()
@@ -224,7 +226,9 @@ class ScanQRCodePage(tk.Canvas):
                 password = credentials[2]
                 
                 if not self.medbot.login(user_id, password):
-                    self.medbot.speak('Credentials do not match')
+                    
+                    self.medbot.speak(self.root.config['scan_prompt']['fail_credentials'][self.root.language])
+
                     credentials[0] = None
                     ready = False
                     last_scaned = datetime.datetime.now()
@@ -308,7 +312,7 @@ class HandSanitiationPage(tk.Canvas):
                 self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
 
             elif hand_position == '96':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
 
             hand_position = self.medbot.detect_hand()
 
@@ -472,7 +476,7 @@ class VitalsMeasuringPage(tk.Canvas):
         print(temperature)
         print(temp_rating)
 
-        self.medbot.speak('Please stay still.') 
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
 
         # Get Oxygen Saturation
         oxygen_saturation = self.medbot.start_oximeter()   
@@ -482,7 +486,7 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.after(500)
 
-        self.medbot.speak('Vital Signs Measurement has Completed')
+        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])
 
         self.after(500)
         
@@ -589,14 +593,18 @@ class VitalsReadingPage(tk.Canvas):
         self.after(1000, self.after_init)
     
     def after_init(self):
-        self.medbot.speak('Here are your vital measurement!')
-        self.medbot.speak(f'Your blood pressure is {self.systolic} over {self.diastolic} MMHG and it is {self.bp_rating}') 
-        self.medbot.speak(f'Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}')
-        self.medbot.speak(f'Your temperature is {self.temperature} celcius and it is {self.temp_rating}')
-        self.medbot.speak(f'Your pulse rate is {self.pulse_rate} BPM and it is {self.pr_rating}')
+        self.medbot.speak(self.root.config['results_prompt']['prompt'][self.root.language])
 
-        self.medbot.speak('Do you want to print your vital sign measurement?')
-        self.medbot.speak('Please click the button to print your results.')
+        self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language])
+       
+        self.medbot.speak(self.root.config['results_prompt']['result_os'][self.root.language])
+     
+        self.medbot.speak(self.root.config['results_prompt']['result_temp'][self.root.language])
+        
+        self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language])
+
+        self.medbot.speak(self.root.config['printing']['prompt'][self.root.language])
+        
 
     def on_red_button_click(self):
         self.master.show_thank_you_page()
@@ -672,6 +680,7 @@ class ThankYouPage(tk.Canvas):
     
     def thankyou(self):   
         self.medbot.speak('Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.')
+        self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
 
 if __name__ == "__main__":
     bot = medbot.Medbot()
