@@ -298,28 +298,28 @@ class HandSanitiationPage(tk.Canvas):
         text = "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
         self.text_label = self.create_text(425, 245, text=text, font=("Helvetica", 18), fill="black")
 
-    #     self.after(500, self.welcome)
+        self.after(500, self.welcome)
     
-    # def welcome(self):
-    #     self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
+    def welcome(self):
+        self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
 
-    #     self.after(500, self.hand_sanitation)
+        self.after(500, self.hand_sanitation)
 
-    # def hand_sanitation(self):
-    #     hand_position = self.medbot.detect_hand()
-    #     while hand_position != '91':
-    #         if hand_position == '95':
-    #             self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+    def hand_sanitation(self):
+        hand_position = self.medbot.detect_hand()
+        while hand_position != '91':
+            if hand_position == '95':
+                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
 
-    #         elif hand_position == '96':
-    #             self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
+            elif hand_position == '96':
+                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
 
-    #         hand_position = self.medbot.detect_hand()
+            hand_position = self.medbot.detect_hand()
 
-    #     self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
+        self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
 
-    #     # Start sanitizer
-    #     self.medbot.start_hand_santizer(wait_until_completed=True)
+        # Start sanitizer
+        self.medbot.start_hand_santizer(wait_until_completed=True)
 
         self.medbot.speak(self.root.config['sanitizing_prompt']['success'][self.root.language])
 
@@ -398,13 +398,13 @@ class VitalsMeasuringPage(tk.Canvas):
         self.text_label = self.create_text(160, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
         text = "OXYGEN \nSATURATION"
-        self.text_label = self.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
+        self.text_label = self.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
         text = "TEMPERATURE"
         self.text_label = self.create_text(670, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
         text = "PULSE RATE"
-        self.text_label = self.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
+        self.text_label = self.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
        
         self.after(500, self.welcome)
@@ -415,28 +415,28 @@ class VitalsMeasuringPage(tk.Canvas):
 
 
 
-        # self.after(500)
+        self.after(500)
 
-        # # Detect arm position
-        # arm_position = self.medbot.detect_arm()
-        # while not arm_position:
-        #     self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
+        # Detect arm position
+        arm_position = self.medbot.detect_arm()
+        while not arm_position:
+            self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
 
-        #     arm_position = bot.detect_arm()
-        # self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
+            arm_position = bot.detect_arm()
+        self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
 
 
         self.after(500)
 
-        # self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
+        self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
 
 
-        # # Detect finger position until okay
-        # finger_position = self.medbot.detect_finger()
-        # while not finger_position:
-        #     self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
+        # Detect finger position until okay
+        finger_position = self.medbot.detect_finger()
+        while not finger_position:
+            self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
 
-        #     finger_position = self.medbot.detect_finger()
+            finger_position = self.medbot.detect_finger()
 
         #stepper clockwise
         self.medbot.lock_oximeter()
@@ -471,12 +471,11 @@ class VitalsMeasuringPage(tk.Canvas):
         self.itemconfig(self.box1_label, image=self.box5_tk)
                                 
         # Change the color of bp
-        self.after(500, self.change_box_color4)
+        self.after(500, self.change_box_color2)
 
     # Function to change the box color of pr
-    def change_box_color4(self):
-        self.itemconfig(self.box4_label, image=self.box5_tk)
-
+    def change_box_color2(self):
+        self.itemconfig(self.box2_label, image=self.box5_tk)
 
         # Get temp
         self.after(500, self.get_temperature)
@@ -509,11 +508,11 @@ class VitalsMeasuringPage(tk.Canvas):
         print(os_rating)
 
         # Change the color of spO2 after printing os rating
-        self.after(500, self.change_box_color2)
+        self.after(500, self.change_box_color4)
 
     # Function to change the box color of spO2
-    def change_box_color2(self):
-        self.itemconfig(self.box2_label, image=self.box5_tk)
+    def change_box_color4(self):
+        self.itemconfig(self.box4_label, image=self.box5_tk)
 
         # Perform final actions after printing os rating
         self.after(500, self.complete)

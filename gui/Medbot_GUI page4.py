@@ -74,12 +74,12 @@ text = "BLOOD \nPRESSURE"
 text_label = canvas.create_text(160, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
 text = "OXYGEN \nSATURATION"
-text_label = canvas.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
+text_label = canvas.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black")
 
 text = "TEMPERATURE"
 text_label = canvas.create_text(670, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
 text = "PULSE RATE"
-text_label = canvas.create_text(920, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
+text_label = canvas.create_text(425, 190, text=text, font=("ROBOTO", 14, "bold"), fill="black", justify=tk.CENTER)
 
 root.mainloop()
