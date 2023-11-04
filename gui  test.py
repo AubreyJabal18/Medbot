@@ -298,28 +298,28 @@ class HandSanitiationPage(tk.Canvas):
         text = "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
         self.text_label = self.create_text(425, 245, text=text, font=("Helvetica", 18), fill="black")
 
-        self.after(500, self.welcome)
+    #     self.after(500, self.welcome)
     
-    def welcome(self):
-        self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
+    # def welcome(self):
+    #     self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
 
-        self.after(500, self.hand_sanitation)
+    #     self.after(500, self.hand_sanitation)
 
-    def hand_sanitation(self):
-        hand_position = self.medbot.detect_hand()
-        while hand_position != '91':
-            if hand_position == '95':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+    # def hand_sanitation(self):
+    #     hand_position = self.medbot.detect_hand()
+    #     while hand_position != '91':
+    #         if hand_position == '95':
+    #             self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
 
-            elif hand_position == '96':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
+    #         elif hand_position == '96':
+    #             self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
 
-            hand_position = self.medbot.detect_hand()
+    #         hand_position = self.medbot.detect_hand()
 
-        self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
+    #     self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
 
-        # Start sanitizer
-        self.medbot.start_hand_santizer(wait_until_completed=True)
+    #     # Start sanitizer
+    #     self.medbot.start_hand_santizer(wait_until_completed=True)
 
         self.medbot.speak(self.root.config['sanitizing_prompt']['success'][self.root.language])
 
@@ -362,31 +362,31 @@ class VitalsMeasuringPage(tk.Canvas):
         self.image5_tk = ImageTk.PhotoImage(self.image5)
         self.image5_label = self.create_image(60, 250, image=self.image5_tk)
 
-        self.box1 = Image.open(fr"images/button (9).png")
+        self.box1 = Image.open(fr"images/button (19).png")
         self.box1 = self.box1.resize((700, 700), Image.ANTIALIAS)
         self.box1_tk = ImageTk.PhotoImage(self.box1)
         self.box1_label = self.create_image(310, 248, image=self.box1_tk) 
 
-        self.box2 = Image.open(fr"images/button (9).png")
+        self.box2 = Image.open(fr"images/button (19).png")
         self.box2 = self.box2.resize((700, 700), Image.ANTIALIAS)
         self.box2_tk = ImageTk.PhotoImage(self.box2)
         self.box2_label = self.create_image(570, 248, image=self.box2_tk) 
 
-        self.box3 = Image.open(fr"images/button (9).png")
+        self.box3 = Image.open(fr"images/button (19).png")
         self.box3 = self.box3.resize((700, 700), Image.ANTIALIAS)
         self.box3_tk = ImageTk.PhotoImage(self.box3)
         self.box3_label = self.create_image(820, 248, image=self.box3_tk) 
 
-        self.box4 = Image.open(fr"images/button (9).png")
+        self.box4 = Image.open(fr"images/button (19).png")
         self.box4 = self.box4.resize((700, 700), Image.ANTIALIAS)
         self.box4_tk = ImageTk.PhotoImage(self.box4)
         self.box4_label = self.create_image(1070, 248, image=self.box4_tk)
 
-        self.box5 = Image.open(fr"images/button (19).png")
+        self.box5 = Image.open(fr"images/button (9).png")
         self.box5 = self.box5.resize((700, 700), Image.ANTIALIAS)
         self.box5_tk = ImageTk.PhotoImage(self.box5)
         
-        highlight_color = "black" 
+        highlight_color = "black"
         text = "ENHANCED MED-BOT"
         self.text_label_highlight = self.create_text(515 + 2, 60 + 2, text=text, font=("ROBOTO", 30, "bold"), fill=highlight_color)
         self.text_label = self.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"), fill="#26B4BE")
@@ -428,15 +428,15 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.after(500)
 
-        self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
+        # self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
 
 
-        # Detect finger position until okay
-        finger_position = self.medbot.detect_finger()
-        while not finger_position:
-            self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
+        # # Detect finger position until okay
+        # finger_position = self.medbot.detect_finger()
+        # while not finger_position:
+        #     self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
 
-            finger_position = self.medbot.detect_finger()
+        #     finger_position = self.medbot.detect_finger()
 
         #stepper clockwise
         self.medbot.lock_oximeter()
@@ -448,26 +448,40 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.medbot.start_solenoid()
 
+        # Get temp
+        self.after(500, self.get_bp_and_pr)
+
+    def get_bp_and_pr(self):
         # Get Blood Pressure
         systolic, diastolic, pulse_rate = self.medbot.start_blood_pressure_monitor()
         bp_rating = self.medbot.determine_bp(systolic, diastolic)
         print(systolic, diastolic)
-        print(bp_rating)
-
-
-        # Update the image of the box for Blood Pressure
-        self.itemconfig(self.box1_label, image=self.box5_tk)
-
-        self.after(500)
+        print(bp_rating)    
 
         # Get Pulse Rate
         pr_rating = self.medbot.determine_pr(pulse_rate)
         print(pulse_rate)
         print(pr_rating)
-        
 
-        self.after(500)
+        # Change the color of pr
+        self.after(500, self.change_box_color1)
 
+    # Function to change the box color of bp
+    def change_box_color1(self):
+        self.itemconfig(self.box1_label, image=self.box5_tk)
+                                
+        # Change the color of bp
+        self.after(500, self.change_box_color4)
+
+    # Function to change the box color of pr
+    def change_box_color4(self):
+        self.itemconfig(self.box4_label, image=self.box5_tk)
+
+
+        # Get temp
+        self.after(500, self.get_temperature)
+
+    def get_temperature(self):
         # Get Temperature
         self.medbot.speak(self.root.config['vital_signs_measurement']['getting_temp'][self.root.language])
 
@@ -476,20 +490,37 @@ class VitalsMeasuringPage(tk.Canvas):
         print(temperature)
         print(temp_rating)
 
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
+        # Change the color of temp after printing temperature rating
+        self.after(500, self.change_box_color3)
+
+    # Function to change the box color of temp
+    def change_box_color3(self):
+        self.itemconfig(self.box3_label, image=self.box5_tk)
 
         # Get Oxygen Saturation
-        oxygen_saturation = self.medbot.start_oximeter()   
+        self.after(500, self.get_oxygen_saturation)
+
+    def get_oxygen_saturation(self):
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
+
+        oxygen_saturation = self.medbot.start_oximeter()  
         os_rating = self.medbot.determine_os(oxygen_saturation)
-        print(oxygen_saturation) 
+        print(oxygen_saturation)
         print(os_rating)
 
-        self.after(500)
+        # Change the color of spO2 after printing os rating
+        self.after(500, self.change_box_color2)
 
-        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])
+    # Function to change the box color of spO2
+    def change_box_color2(self):
+        self.itemconfig(self.box2_label, image=self.box5_tk)
 
-        self.after(500)
-        
+        # Perform final actions after printing os rating
+        self.after(500, self.complete)
+
+    # Perform final actions after both temp and os readings
+    def complete(self):
+        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])    
         self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
 
 
