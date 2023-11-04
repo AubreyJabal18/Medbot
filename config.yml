@@ -2,8 +2,8 @@ active_language: eng
 
 intro_prompt:
   welcome:
-    eng: Hi, I am Enhanced Med-Bot. Your overall healthcare buddy
-    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng inyong vital signs measurements.
+    eng: Hi, I am Enhanced Med-Bot. Your over all healthcare buddy
+    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng vital signs measurements.
   proceed:
     eng: To proceed please scan your qrcode
     fil: Para makakuha ng vital signs measurement, maaaring i-scan ang inyong qrcode.
@@ -11,7 +11,7 @@ intro_prompt:
 scan_prompt:
   success: 
     eng: Welcome, {}
-    fil: Kumusta, {}
+    fil: Mabuhay, {}
   fail:
     eng: Sorry, wrong qrcode, credentials do not match
     fil: Pasensya kaibigan, mali ang iyong qrcode hindi tugma sa iyong credentials
@@ -27,7 +27,7 @@ sanitizing_prompt:
     eng: Your hand is too close
     fil: Malapit ang inyong kamay
   correct_position:
-    eng: Please keep yout hands stay still. Now starting sanitizer
+    eng: Please keep your hands stay still. Now starting sanitizer
     fil: Panatilihin ang mga kamay at magsisimula ng mag sanitize
   success:
     eng: Sanitizing complete. Proceeding to vital signs measurement
@@ -35,7 +35,7 @@ sanitizing_prompt:
   
 arm_prompt:
   position:
-    eng: Please position your arm properly
+    eng: Proceeding to vital signs measurement. Please position your arm properly
     fil: Maaaring ilagay ang inyong braso ng maayos
   rest:
     eng: Please rest your arm correctly
