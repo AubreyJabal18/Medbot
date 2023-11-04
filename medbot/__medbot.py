@@ -30,7 +30,7 @@ class Medbot:
         )
         self.user = None
         self.cursor = self.database.cursor()
-        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         try:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:

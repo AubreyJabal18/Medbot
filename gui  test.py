@@ -11,6 +11,7 @@ class Root(tk.Tk):
     def __init__(self, bot):
         super().__init__()
         self.medbot = bot
+        self.root = root
         self.title('Medbot')
         self.geometry("1030x540")
         self.resizable(False, False)
@@ -70,6 +71,7 @@ class Homepage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
      
         self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
@@ -108,29 +110,29 @@ class Homepage(tk.Canvas):
         self.eng_button.place(x=860, y=420)
         self.eng_button.config(font=("Helvetica", 12))
 
-        if Root.current_language == "English":
+        if self.root.current_language == "English":
             self.eng_button.config(state=tk.DISABLED)
 
         self.fil_button = tk.Button(root, text="FIL", command=self.toggle_language, width=5, height=2)
         self.fil_button.place(x=920, y=420)
         self.fil_button.config(font=("Helvetica", 12))
 
-        if Root.current_language == "Filipino":
+        if self.root.current_language == "Filipino":
             self.fil_button.config(state=tk.DISABLED)
 
     def toggle_language(self):
-        if Root.current_language == "English":
-            Root.current_language = "Filipino"
+        if self.root.current_language == "English":
+            self.root.current_language = "Filipino"
             self.eng_button.config(state=tk.NORMAL)
             self.fil_button.config(state=tk.DISABLED)
         else:
-            Root.current_language = "English"
+            self.root.current_language = "English"
             self.fil_button.config(state=tk.NORMAL)
             self.eng_button.config(state=tk.DISABLED)
         self.update_language()
 
     def update_language(self):
-        if Root.current_language == "English":
+        if self.root.current_language == "English":
             self.label.config(text="Click the Button to switch language")
         else:
             self.label.config(text="Pindutin ang Button para magpalit ng Wika")
@@ -142,6 +144,7 @@ class ScanQRCodePage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
 
         self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
@@ -209,6 +212,7 @@ class HandSanitiationPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
 
         self.bg_image1 = tk.PhotoImage(file=fr"images/Frame 4 (1).png")
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
@@ -290,6 +294,7 @@ class VitalsMeasuringPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
 
         self.image = Image.open(fr"images/Frame 5.png")
         self.image = self.image.resize((1030, 540), Image.ANTIALIAS)
@@ -447,6 +452,7 @@ class VitalsReadingPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating,**kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
         self.systolic = systolic
         self.diastolic = diastolic
         self.pulse_rate = pulse_rate
@@ -591,6 +597,7 @@ class ThankYouPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
+        self.root = root
 
         self.image = Image.open(fr"images/Frame 5.png")
         self.image =  self.image.resize((1030, 540), Image.ANTIALIAS)
