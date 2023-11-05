@@ -22,7 +22,7 @@ scan_prompt:
 sanitizing_prompt:
   position:
     eng: Please put your hand in front of the sanitizer
-    fil: Maaaring ilagay amg inyong kamay sa harap ng sanitizer
+    fil: Maaaring ilagay ang inyong kamay sa harap nang sanitizer
   too_far:
     eng: Your hand is too far
     fil: Malayo ang iyong kamay
@@ -31,18 +31,18 @@ sanitizing_prompt:
     fil: Malapit ang inyong kamay
   correct_position:
     eng: Please keep your hands stay still. Now starting sanitizer
-    fil: Panatilihin ang mga kamay at magsisimula ng mag sanitize
+    fil: Panatilihin ang mga kamay at magsisimula nang mag sanitize
   success:
     eng: Sanitizing complete. Proceeding to vital signs measurement
-    fil: tapos na ang sanitation. Magpatuloy na sa pagkuha ng vital signs
+    fil: tapos na ang sanitation. Magpatuloy na sa pagkuha nang vital signs
   
 arm_prompt:
   position:
     eng: Proceeding to vital signs measurement. Please position your arm properly
-    fil: Maaaring ilagay ang inyong braso ng maayos
+    fil: Maaaring ilagay ang inyong braso nang maayos
   rest:
     eng: Please rest your arm correctly
-    fil: Maaaring ipahinga ang inyong braso ng tama
+    fil: Maaaring ipahinga ang inyong braso nang tama
   success:
     eng: Your arm was detected
     fil: Natukoy ang iyong braso
@@ -56,7 +56,7 @@ finger_prompt:
     fil: Maaaring ilagay ang inyong daliri sa oximeter
   success:
     eng: Locking Oximeter, please do not remove your finger
-    fil: Isasarado na ang oximeter, pakiusap huwag tanggalin ang iyong daliri
+    fil: Isasarado na ang oximeter, pakiusap huwag alisin ang iyong daliri
   fail:
     eng: Finger not detected
     fil: Hindi matukoy ang iyong daliri
@@ -73,7 +73,7 @@ vital_signs_measurement:
     fil: Manatili lamang, Ngayon ay kukunin na ang iyong oxygen saturation
   success:
     eng: Vital signs measurement has completed
-    fil: tapos na ang pagkuha ng iyong vital signs measurement
+    fil: tapos na ang pagkuha nang iyong vital signs measurement
 
 results_prompt:
   prompt:
@@ -81,22 +81,39 @@ results_prompt:
     fil: Narito ang iyong vital signs measurement
   result_bp:
     eng: Your blood pressure is {} over {} mmhg and it is {}
-    fil: Ang iyong blood pressure ay {} over {} mmhg at it ay {}
+    fil: Ang iyong blood pressure ay {} over {} mmhg at ito ay {}
   result_os:
     eng: Your oxygen saturation is {} percent and it is {}
-    fil: Ang iyong ay oxygen saturation {} percent at it ay {}
+    fil: Ang iyong oxygen saturation ay {} percent at ito ay {}
   result_temp:
     eng: Your temperature is {} celcius and it is {}
-    fil: Ang iyong ay oxygen saturation {} celcius at it ay {}
+    fil: Ang iyong temperatura ay {} celcius at ito ay {}
   result_pr:
     eng: Your pulse rate is {} bpm and it is {}
-    fil: Ang iyong ay oxygen saturation {} bpm at it ay {}
+    fil: Ang iyong pulse rate ay {} bpm at ito ay {}
 
 printing:
   prompt:
     eng: Do you want to print your vital signs measurement? Click the button to print your results.
-    fil: Gusto mo ba ng kopya ng iyong vital signs measurement? Maaaring pindutin ang button upang makakuha ng kopya ng resulta ng iyong vital signs
+    fil: Gusto mo ba nang kopya nang iyong vital signs measurement? Maaaring pindutin ang button upang makakuha nang kopya nang resulta nang iyong vital signs
 
   thank_you_voice:
     eng: Well done on completing your vital sign check up! We gebuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
-    fil: Tapos na ang pagkumpleto ng iyong vital sign check up! Tunay kaming nagpapasalamat sa iyo sa pagpili ng aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan
+    fil: Tapos na ang pagkumpleto nang iyong vital sign check up! Kami ay nagpapasalamat sa iyong pagpili nang aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan.
+
+text_labels:
+  text1:
+    eng: Get Started
+    fil: Magsimula
+
+  text2:
+    eng: "If you don't have an account \n yet, feel free to register on \n our website or simply scan \n the QR Code we've got right \n here for you."
+    fil: "Kung wala ka pang account,\nmagrehistro sa aming website \n o i-scan ang QR Code dito."
+
+  text3:
+    eng: "Place your hands near the \nright arm of the Enhanced \nMed-Bot for the sanitation to start."
+    fil: "Ilagay ang iyong kamay \nmalapit sa kanang braso \nnang Med-Bot upang \nmagsimula ang sanitasyon."
+
+  text4:
+    eng: "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
+    fil: "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kasi ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."

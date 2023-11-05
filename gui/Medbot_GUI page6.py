@@ -34,7 +34,7 @@ text_label = canvas.create_text(515, 60, text=text, font=("ROBOTO", 30, "bold"),
 text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
 text_label = canvas.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
-text = "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
+text = "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kasi ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."
 text_label = canvas.create_text(515, 320, text=text, font=("ROBOTO", 20, "bold italic"), fill="black")
 
 
