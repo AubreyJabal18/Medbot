@@ -146,20 +146,23 @@ class Medbot:
         '''
         Lock arm cuff
         '''
-        self.send_command(12)
-        response = self.get_arduino_response()
 
-        if response <= '200':
-           response = self.get_arduino_response()
-        else:
-            response = self.get_arduino_response()
-            self.send_command(2)
-        return response
+        self.send_command(14)
+
+        self.wait_until_operation_completed()
+      
+  
+
+        # self.send_command(12)
+        # response = self.get_arduino_response()
+
+        # if response <= '200':
+        #    response = self.get_arduino_response()
+        # else:
+        #     response = self.get_arduino_response()
+        #     self.send_command(2)
+        # return response
         
-
-
-
-
         # self.send_command(12)
         # if wait_until_completed:
         #     self.wait_until_operation_completed()
@@ -194,16 +197,16 @@ class Medbot:
         else:
             return False    
 
-    def detect_arm_bpm(self):
-        '''
-        detect your using FSR sensor
-        '''
-        self.send_command(14)
-        response = self.get_arduino_response()
-        if response == "91":
-            return True
-        else:
-            return False 
+    # def detect_arm_bpm(self):
+    #     '''
+    #     detect your using FSR sensor
+    #     '''
+    #     self.send_command(14)
+    #     response = self.get_arduino_response()
+    #     if response == "91":
+    #         return True
+    #     else:
+    #         return False 
         
     def start_solenoid(self, wait_until_completed: bool = False):
         self.send_command(7)
@@ -240,9 +243,9 @@ class Medbot:
         '''
         # start solenoid
         # detect air_pressure until 0
+        blood_pressure_monitor = Microlife_BTLE()
         while True:
-            try:
-                blood_pressure_monitor = Microlife_BTLE()
+            try:               
                 blood_pressure_monitor.bluetooth_communication(blood_pressure_monitor.patient_id_callback)                          
                 latest_measurement = blood_pressure_monitor.get_measurements()[-1]
                 break
