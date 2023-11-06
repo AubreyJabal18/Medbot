@@ -1,6 +1,6 @@
 import medbot
 from datetime import datetime
-
+import yaml
 import tkinter as tk
 from PIL import Image, ImageTk
 
@@ -14,7 +14,18 @@ class Root(tk.Tk):
 
         self.show_homepage()
 
+        self.load_config()
+        self.language = self.config['active_language']
+
         self.mainloop()
+
+    def change_language(self, language):
+        self.config['active_language'] = language
+        yaml.safe_dump(self.config)
+
+    def load_config(self):
+        with open('config.yml', 'r') as file:
+            self.config = yaml.safe_load(file) 
 
     def show_homepage(self):
         for child in self.winfo_children():
@@ -40,7 +51,7 @@ class Root(tk.Tk):
         vitals_measuring_page = VitalsMeasuringPage(self, self.medbot)
         vitals_measuring_page.pack()
     
-    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating):
+    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature,oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating):
         for child in self.winfo_children():
             child.destroy()
         vitals_reading_page = VitalsReadingPage(self, self.medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
@@ -137,10 +148,8 @@ class ScanQRCodePage(tk.Canvas):
         self.after(500, self.welcome)
         
     def welcome(self):
-        self.medbot.speak('Hi')
-        self.medbot.speak('I am Enhanced Med-Bot')
-        self.medbot.speak('Youre All in One Healthcare Budddy')
-        self.medbot.speak('To proceed, please scan your qrcode')
+        self.medbot.speak(self.root.config['intro_prompt']['welcome'][self.root.language])
+        self.medbot.speak(self.root.config['intro_prompt']['proceed'][self.root.language])
 
         self.after(50, self.on_qr_code_click)
 
@@ -325,7 +334,7 @@ class VitalsMeasuringPage(tk.Canvas):
         self.medbot.speak('Proceeding to vital signs measurement. Please position your arm correctly')
         self.medbot.speak('Please rest your arm properly')
 
-        self.after(500)
+        # self.after(500)
 
         # # Detect arm position
         # arm_position = self.medbot.detect_arm()
@@ -350,7 +359,7 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.medbot.speak('Please stay still. Now getting your Blood Pressure and Pulse Rate')
 
-        # self.medbot.start_solenoid()
+        self.medbot.start_solenoid()
 
         # Get Blood Pressure
         systolic, diastolic, pulse_rate = self.medbot.start_blood_pressure_monitor()
@@ -379,7 +388,7 @@ class VitalsMeasuringPage(tk.Canvas):
         print(temperature)
         print(temp_rating)
 
-        self.medbot.speak('Please stay still. Now getting your oxygen saturation')
+        self.medbot.speak('Please stay still.')
 
         # Get Oxygen Saturation
         oxygen_saturation = self.medbot.start_oximeter()   
@@ -393,11 +402,11 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.after(500)
         
-        self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
+        self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, bp_rating, pr_rating, temp_rating)
 
 
 class VitalsReadingPage(tk.Canvas):
-    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating, **kwargs):
+    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating,**kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
         self.medbot = bot
         self.systolic = systolic
@@ -449,11 +458,11 @@ class VitalsReadingPage(tk.Canvas):
 
         # Create the "Red" button
         self.red_button = tk.Button(self, text="NO", font=("Helvetica", 10), command=self.on_red_button_click, bg="red")
-        self.red_button_window = self.create_window(300, 470, window=self.red_button)
+        self.red_button_window = self.create_window(640, 470, window=self.red_button)
 
         # Create the "Green" button
         self.green_button = tk.Button(self, text="YES", font=("Helvetica", 10), command=self.on_green_button_click, bg="green")
-        self.green_button_window = self.create_window(600, 470, window=self.green_button)
+        self.green_button_window = self.create_window(570, 470, window=self.green_button)
 
         highlight_color = "black" 
         text = "ENHANCED MED-BOT"
@@ -480,7 +489,7 @@ class VitalsReadingPage(tk.Canvas):
         self.blood_pressure_label = self.create_text(360, 230, text=blood_pressure_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
 
 
-        oxygen_saturation_reading = f"{oxygen_saturation}%" 
+        oxygen_saturation_reading = f"%" 
         self.oxygen_saturation_label = self.create_text(740, 230, text=oxygen_saturation_reading, font=("ROBOTO", 14, "underline bold"), fill="black")            
 
         temperature_reading = f"{temperature}°C" 
@@ -524,7 +533,7 @@ _________________________________
 
 Name: {bot.user[1]}, {bot.user[2]}
 Blood Pressure: {self.systolic}/{self.diastolic} mmHg ({self.bp_rating})
-Oxygen Saturation:  {self.oxygen_saturation} % ({self.os_rating})
+Oxygen Saturation: {self.oxygen_saturation} % ({self.os_rating})
 Temperature: {self.temperature} C ({self.temp_rating})
 Pulse Rate: {self.pulse_rate} bpm ({self.pr_rating})
 

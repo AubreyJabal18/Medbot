@@ -1,0 +1,103 @@
+active_language: eng
+
+  intro_prompt:
+    welcome:
+      eng: Hi, I am Enhanced Med-Bot. Your overall healthcare buddy
+      fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng inyong vital signs measurements.
+    proceed:
+      eng: To proceed please scan your qrcode
+      fil: Para makakuha ng vital signs measurement, maaaring i-scan ang inyong qrcode.
+
+  scan_prompt:
+    success: 
+      eng: Welcome, {}
+      fil: Kumusta, {}
+    fail:
+      eng: Sorry, wrong qrcode, credentials do not match
+      fil: Pasensya kaibigan, mali ang iyong qrcode hindi tugma sa iyong credentials
+
+  sanitizing_prompt:
+    position:
+      eng: Please put your hand in front of the sanitizer
+      fil: Maaaring ilagay amg inyong kamay sa harap ng sanitizer
+    too_far:
+      eng: Your hand is too far
+      fil: Malayo ang iyong kamay
+    too_close:
+      eng: Your hand is too close
+      fil: Malapit ang inyong kamay
+    correct_position:
+      eng: Please keep yout hands stay still. Now starting sanitizer
+      fil: Panatilihin ang mga kamay at magsisimula ng mag sanitize
+    success:
+      eng: Sanitizing complete. Proceeding to vital signs measurement
+      fil: tapos na ang sanitation. Magpatuloy na sa pagkuha ng vital signs
+    
+  arm_prompt:
+    position:
+      eng: Please position your arm properly
+      fil: Maaaring ilagay ang inyong braso ng maayos
+    rest:
+      eng: Please rest your arm correctly
+      fil: Maaaring ipahinga ang inyong braso ng tama
+    success:
+      eng: Your arm was detected
+      fil: Natukoy ang iyong braso
+    fail:
+      eng: Your arm is not detected
+      fil: Hindi matukoy ang iyong braso
+
+  finger_prompt:
+    position:
+      eng: Please insert your dinger on the oximeter
+      fil: Maaaring ilagay ang inyong daliri sa oximeter
+    success:
+      eng: Locking Oximeter, please do not remove your finger
+      fil: Isasarado na ang oximeter, pakiusap huwag tanggalin ang iyong daliri
+    fail:
+      eng: Finger not detected
+      fil: Hindi matukoy ang iyong daliri
+  
+  vital_signs_measurement:
+    getting_bp:
+      eng: Please stay still. Now getting your Blood Pressure and Pulse rate
+      fil: Manatili lamang, Ngayon ay kukunin na ang iyong Blood Pressure at Pulse rate
+    getting_temp:
+      eng: Now getting you temperature
+      fil: Ngayon ay kukunin na ang iyong temperatura
+    getting_os:
+      eng: Please stay still. Now getting your oxygen saturation
+      fil: Manatili lamang, Ngayon ay kukunin na ang iyong oxygen saturation
+    success:
+      eng: Vital signs measurement has completed
+      fil: tapos na ang pagkuha ng iyong vital signs measurement
+
+  results_prompt:
+    prompt:
+      eng: Here are your vital signs measurement
+      fil: NArito ang iyong vital signs measurement
+    result_bp:
+      eng: Your blood pressure is {self.systolic} over {self.diastolic} mmhg and it is {self.bp_rating}
+      fil: Ang iyong blood pressure ay {self.systolic} over {self.diastolic} mmhg at it ay {self.bp_rating}
+    result_os:
+      eng: Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}
+      fil: Ang iyong ay oxygen saturation {self.oxygen_saturation} percent at it ay {self.os_rating}
+    result_temp:
+      eng: Your temperature is {self.temperature} celcius and it is {self.temp_rating}
+      fil: Ang iyong ay oxygen saturation {self.temperature} celcius at it ay {self.temp_rating}
+    result_pr:
+      eng: Your pulse rate is {self.pulse_rate} bpm and it is {self.pr_rating}
+      fil: Ang iyong ay oxygen saturation {self.pulse_rate} bpm at it ay {self.pr_rating}
+
+  printing:
+    prompt:
+      eng: Do you want to print your vital signs measurement? Please click the button to print your results.
+      fil: Gusto mo ba ng kopya ng iyong vital signs measurement? Maaaring pindutin ang button upang makakuha ng kopya ng resulta ng iyong vital signs
+  
+    thank_you_voice:
+      eng: Well done on completing your vital sign check up! We gebuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
+      fil: Tapos na ang pagkumpleto ng iyong vital sign check up! Tunay kaming nagpapasalamat sa iyo sa pagpili ng aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan
+
+    thank_you_text:
+      eng: Well done on completing your vital sign check up! We gebuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
+      fil: Tapos na ang pagkumpleto ng iyong vital sign check up! Tunay kaming nagpapasalamat sa iyo sa pagpili ng aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan

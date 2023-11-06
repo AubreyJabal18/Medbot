@@ -185,7 +185,7 @@ class Medbot:
 
     def detect_arm(self):
         '''
-        Unlock arm cuff
+        detect your using FSR sensor
         '''
         self.send_command(13)
         response = self.get_arduino_response()
@@ -196,7 +196,7 @@ class Medbot:
 
     def detect_arm_bpm(self):
         '''
-        detect your using touch sensor
+        detect your using FSR sensor
         '''
         self.send_command(14)
         response = self.get_arduino_response()
