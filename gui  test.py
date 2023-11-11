@@ -1,8 +1,9 @@
 import medbot
-from datetime import datetime
+import datetime
 import yaml
 import tkinter as tk
 from PIL import Image, ImageTk
+import time
 
 class Root(tk.Tk):
     # Initialize the GUI
@@ -11,21 +12,21 @@ class Root(tk.Tk):
     def __init__(self, bot):
         super().__init__()
         self.medbot = bot
-        self.root = root
         self.title('Medbot')
         self.geometry("1030x540")
         self.resizable(False, False)
 
-        self.show_homepage()
-
         self.load_config()
         self.language = self.config['active_language']
 
+        self.show_homepage()
+
         self.mainloop()
 
-    def change_language(self, language):
+    def update_language(self, language):
         self.config['active_language'] = language
         yaml.safe_dump(self.config)
+        self.language = language
 
     def load_config(self):
         with open('config.yml', 'r') as file:
@@ -110,29 +111,32 @@ class Homepage(tk.Canvas):
         self.eng_button.place(x=860, y=420)
         self.eng_button.config(font=("Helvetica", 12))
 
-        if self.root.current_language == "English":
+        if self.root.language == "eng":
             self.eng_button.config(state=tk.DISABLED)
 
         self.fil_button = tk.Button(root, text="FIL", command=self.toggle_language, width=5, height=2)
         self.fil_button.place(x=920, y=420)
         self.fil_button.config(font=("Helvetica", 12))
 
-        if self.root.current_language == "Filipino":
+        if self.root.language == "fil":
             self.fil_button.config(state=tk.DISABLED)
 
     def toggle_language(self):
-        if self.root.current_language == "English":
-            self.root.current_language = "Filipino"
+        if self.root.language == "eng":
+            self.root.language = "fil"
             self.eng_button.config(state=tk.NORMAL)
             self.fil_button.config(state=tk.DISABLED)
+            self.root.update_language('fil')
+
         else:
-            self.root.current_language = "English"
+            self.root.language = "eng"
             self.fil_button.config(state=tk.NORMAL)
             self.eng_button.config(state=tk.DISABLED)
-        self.update_language()
+            self.update_language()
+            self.root.update_language('eng')
 
     def update_language(self):
-        if self.root.current_language == "English":
+        if self.root.language == "eng":
             self.label.config(text="Click the Button to switch language")
         else:
             self.label.config(text="Pindutin ang Button para magpalit ng Wika")
@@ -195,17 +199,45 @@ class ScanQRCodePage(tk.Canvas):
         self.after(50, self.on_qr_code_click)
 
     def on_qr_code_click(self):
-        qr_data = self.medbot.scan_qrcode()
-        credentials = qr_data.split(' ')
-        if credentials[0] != 'medbot':
-            self.medbot.speak('Wrong QRCode')
-            return
-        user_id = credentials[1]
-        password = credentials[2]
-        if not bot.login(user_id, password):
-            self.medbot.speak('Credentials do not match')
-            return
-        self.medbot.speak(f'Welcome {self.medbot.user[1]}')
+        success = False
+        ready = True
+        last_scaned = datetime.datetime.now()
+        while not success:
+            if not ready:
+                elapse_time = datetime.datetime.now() - last_scaned
+                if elapse_time >= datetime.timedelta(seconds=7):
+                    ready = True
+
+            qr_data = self.medbot.scan_qrcode()
+            credentials = qr_data.split(' ')
+            
+            if ready and credentials[0] != 'medbot':
+    
+                self.medbot.speak(self.root.config['scan_prompt']['fail_qrcode'][self.root.language])
+
+                credentials[0] = None
+                ready = False
+                last_scaned = datetime.datetime.now()
+                time.sleep(1)
+                continue            
+      
+            if ready and credentials[0] == 'medbot':
+                user_id = credentials[1]
+                password = credentials[2]
+                
+                if not self.medbot.login(user_id, password):
+                    
+                    self.medbot.speak(self.root.config['scan_prompt']['fail_credentials'][self.root.language])
+
+                    credentials[0] = None
+                    ready = False
+                    last_scaned = datetime.datetime.now()
+                    time.sleep(1)
+                    continue
+                success = True
+
+        self.medbot.speak(self.root.config['scan_prompt']['success'][self.root.language].format(self.medbot.user[1]))
+
         self.master.show_sanitation_page()
 
 class HandSanitiationPage(tk.Canvas):
@@ -269,24 +301,28 @@ class HandSanitiationPage(tk.Canvas):
         self.after(500, self.welcome)
     
     def welcome(self):
-        self.medbot.speak('Please put your hands in front of the sanitizer')
-        
+        self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
+
         self.after(500, self.hand_sanitation)
 
     def hand_sanitation(self):
         hand_position = self.medbot.detect_hand()
         while hand_position != '91':
             if hand_position == '95':
-                self.medbot.speak('Hand is too close')
+                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+
             elif hand_position == '96':
-                self.medbot.speak('Hand is too far')
+                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
+
             hand_position = self.medbot.detect_hand()
-        self.medbot.speak('Please keep your hands still. Now starting sanitizer')
+
+        self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
 
         # Start sanitizer
         self.medbot.start_hand_santizer(wait_until_completed=True)
 
-        self.medbot.speak('Sanitizing complete')
+        self.medbot.speak(self.root.config['sanitizing_prompt']['success'][self.root.language])
+
         
         self.master.show_vitals_measuring_page()
 
@@ -374,33 +410,41 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500, self.welcome)
     
     def welcome(self):
-        self.medbot.speak('Proceeding to vital signs measurement. Please position your arm correctly')
-        self.medbot.speak('Please rest your arm properly')
+        self.medbot.speak(self.root.config['arm_prompt']['position'][self.root.language])
+        self.medbot.speak(self.root.config['arm_prompt']['rest'][self.root.language])
+
+
 
         # self.after(500)
 
         # # Detect arm position
         # arm_position = self.medbot.detect_arm()
         # while not arm_position:
-        #     self.medbot.speak('Your arm is not detected')
+        #     self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
+
         #     arm_position = bot.detect_arm()
-        # self.medbot.speak('Your arm was detected')  
+        # self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
+
 
         self.after(500)
 
-        self.medbot.speak('Please insert your finger on the oximeter')
+        self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
+
 
         # Detect finger position until okay
         finger_position = self.medbot.detect_finger()
         while not finger_position:
-            self.medbot.speak('Finger not detected')
+            self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
+
             finger_position = self.medbot.detect_finger()
 
         #stepper clockwise
         self.medbot.lock_oximeter()
-        self.medbot.speak('Locking oximeter, please do not remove your finger')
+        self.medbot.speak(self.root.config['finger_prompt']['success'][self.root.language])
 
-        self.medbot.speak('Please stay still. Now getting your Blood Pressure and Pulse Rate')
+
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_bp'][self.root.language])
+
 
         self.medbot.start_solenoid()
 
@@ -425,13 +469,14 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500)
 
         # Get Temperature
-        self.medbot.speak('Now getting your Temperature Measurement')
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_temp'][self.root.language])
+
         temperature = self.medbot.get_temperature()
         temp_rating = self.medbot.determine_temp(temperature)
         print(temperature)
         print(temp_rating)
 
-        self.medbot.speak('Please stay still.')
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
 
         # Get Oxygen Saturation
         oxygen_saturation = self.medbot.start_oximeter()   
@@ -441,11 +486,11 @@ class VitalsMeasuringPage(tk.Canvas):
 
         self.after(500)
 
-        self.medbot.speak('Vital Signs Measurement has Completed')
+        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])
 
         self.after(500)
         
-        self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, bp_rating, pr_rating, temp_rating)
+        self.master.show_vitals_reading_page(systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating)
 
 
 class VitalsReadingPage(tk.Canvas):
@@ -548,14 +593,18 @@ class VitalsReadingPage(tk.Canvas):
         self.after(1000, self.after_init)
     
     def after_init(self):
-        self.medbot.speak('Here are your vital measurement!')
-        self.medbot.speak(f'Your blood pressure is {self.systolic} over {self.diastolic} MMHG and it is {self.bp_rating}') 
-        self.medbot.speak(f'Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}')
-        self.medbot.speak(f'Your temperature is {self.temperature} celcius and it is {self.temp_rating}')
-        self.medbot.speak(f'Your pulse rate is {self.pulse_rate} BPM and it is {self.pr_rating}')
+        self.medbot.speak(self.root.config['results_prompt']['prompt'][self.root.language])
 
-        self.medbot.speak('Do you want to print your vital sign measurement?')
-        self.medbot.speak('Please click the button to print your results.')
+        self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language])
+       
+        self.medbot.speak(self.root.config['results_prompt']['result_os'][self.root.language])
+     
+        self.medbot.speak(self.root.config['results_prompt']['result_temp'][self.root.language])
+        
+        self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language])
+
+        self.medbot.speak(self.root.config['printing']['prompt'][self.root.language])
+        
 
     def on_red_button_click(self):
         self.master.show_thank_you_page()
@@ -585,7 +634,7 @@ _________________________________
       THANK YOU FOR USING 
         ENHANCED MED-BOT
 
-{datetime.now()}
+{datetime.datetime.now()}
 
 
     '''
@@ -631,6 +680,7 @@ class ThankYouPage(tk.Canvas):
     
     def thankyou(self):   
         self.medbot.speak('Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.')
+        self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
 
 if __name__ == "__main__":
     bot = medbot.Medbot()

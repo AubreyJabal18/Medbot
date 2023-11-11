@@ -2,8 +2,8 @@ active_language: eng
 
 intro_prompt:
   welcome:
-    eng: Hi, I am Enhanced Med-Bot. Your overall healthcare buddy
-    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng inyong vital signs measurements.
+    eng: Hi, I am Enhanced Med-Bot. Your over all healthcare buddy
+    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng vital signs measurements.
   proceed:
     eng: To proceed please scan your qrcode
     fil: Para makakuha ng vital signs measurement, maaaring i-scan ang inyong qrcode.
@@ -11,10 +11,13 @@ intro_prompt:
 scan_prompt:
   success: 
     eng: Welcome, {}
-    fil: Kumusta, {}
-  fail:
-    eng: Sorry, wrong qrcode, credentials do not match
-    fil: Pasensya kaibigan, mali ang iyong qrcode hindi tugma sa iyong credentials
+    fil: Mabuhay, {}
+  fail_qrcode:
+    eng: Wrong qrcode
+    fil: Mali ang iyong qrcode 
+  fail_credentials:
+    eng: Credentials do not match
+    fil: Hindi tugma sa iyong credentials
 
 sanitizing_prompt:
   position:
@@ -27,7 +30,7 @@ sanitizing_prompt:
     eng: Your hand is too close
     fil: Malapit ang inyong kamay
   correct_position:
-    eng: Please keep yout hands stay still. Now starting sanitizer
+    eng: Please keep your hands stay still. Now starting sanitizer
     fil: Panatilihin ang mga kamay at magsisimula ng mag sanitize
   success:
     eng: Sanitizing complete. Proceeding to vital signs measurement
@@ -35,7 +38,7 @@ sanitizing_prompt:
   
 arm_prompt:
   position:
-    eng: Please position your arm properly
+    eng: Proceeding to vital signs measurement. Please position your arm properly
     fil: Maaaring ilagay ang inyong braso ng maayos
   rest:
     eng: Please rest your arm correctly
@@ -49,7 +52,7 @@ arm_prompt:
 
 finger_prompt:
   position:
-    eng: Please insert your dinger on the oximeter
+    eng: Please insert your finger on the oximeter
     fil: Maaaring ilagay ang inyong daliri sa oximeter
   success:
     eng: Locking Oximeter, please do not remove your finger
@@ -75,7 +78,7 @@ vital_signs_measurement:
 results_prompt:
   prompt:
     eng: Here are your vital signs measurement
-    fil: NArito ang iyong vital signs measurement
+    fil: Narito ang iyong vital signs measurement
   result_bp:
     eng: Your blood pressure is {self.systolic} over {self.diastolic} mmhg and it is {self.bp_rating}
     fil: Ang iyong blood pressure ay {self.systolic} over {self.diastolic} mmhg at it ay {self.bp_rating}
@@ -91,7 +94,7 @@ results_prompt:
 
 printing:
   prompt:
-    eng: Do you want to print your vital signs measurement? Please click the button to print your results.
+    eng: Do you want to print your vital signs measurement? Click the button to print your results.
     fil: Gusto mo ba ng kopya ng iyong vital signs measurement? Maaaring pindutin ang button upang makakuha ng kopya ng resulta ng iyong vital signs
 
   thank_you_voice:
