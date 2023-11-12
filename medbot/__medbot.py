@@ -400,7 +400,7 @@ class Medbot:
         return result
 
     def save_reading(self, user_id, systolic, diastolic, oxy_sat, pulse, temp):
-        query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating,temperature, temperature_rating, pulse_rate, pulse_rate_rating,created_at,updated_at) VALUES({user_id}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {oxy_sat}, "{self.determine_os(oxy_sat)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
+        query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating, pulse_rate, pulse_rate_rating, temperature, temperature_rating, created_at, updated_at) VALUES({user_id}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {oxy_sat}, "{self.determine_os(oxy_sat)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
         print(query)
         self.cursor.execute(query)
         self.database.commit()
