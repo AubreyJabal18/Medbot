@@ -37,7 +37,7 @@ class Medbot:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
         
         print('1')
-        self.reset_arduino()
+        # self.reset_arduino()
         print('2')
         self.oximeter = MAX30102()
         print('3')
@@ -222,16 +222,16 @@ class Medbot:
         else:
             self.get_arduino_response
 
-    def reset_arduino(self):
-        '''
-        Reset Arduino
-        '''
-        self.send_command(9)
-        self.send_command(4)
+    # def reset_arduino(self):
+    #     '''
+    #     Reset Arduino
+    #     '''
+    #     self.send_command(9)
+    #     self.send_command(4)
     
     def reset_and_logout(self):
         self.user = None
-        self.reset_arduino()
+    #     self.reset_arduino()
     #########################################
     #                                       #
     #           VITAL SIGN SENSORS          #

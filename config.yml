@@ -3,10 +3,10 @@ active_language: eng
 intro_prompt:
   welcome:
     eng: Hi, I am Enhanced Med-Bot. Your over all healthcare buddy
-    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha ng vital signs measurements.
+    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha nang vital signs measurements.
   proceed:
     eng: To proceed please scan your qrcode
-    fil: Para makakuha ng vital signs measurement, maaaring i-scan ang inyong qrcode.
+    fil: Para makakuha nang vital signs measurement, maaaring i-scan ang inyong qrcode.
 
 scan_prompt:
   success: 
@@ -116,4 +116,4 @@ text_labels:
 
   text4:
     eng: "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
-    fil: "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kasi ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."
+    fil: "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kami ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."
