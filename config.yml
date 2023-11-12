@@ -80,17 +80,17 @@ results_prompt:
     eng: Here are your vital signs measurement
     fil: Narito ang iyong vital signs measurement
   result_bp:
-    eng: Your blood pressure is {self.systolic} over {self.diastolic} mmhg and it is {self.bp_rating}
-    fil: Ang iyong blood pressure ay {self.systolic} over {self.diastolic} mmhg at it ay {self.bp_rating}
+    eng: Your blood pressure is {} over {} mmhg and it is {}
+    fil: Ang iyong blood pressure ay {} over {} mmhg at it ay {}
   result_os:
-    eng: Your oxygen saturation is {self.oxygen_saturation} percent and it is {self.os_rating}
-    fil: Ang iyong ay oxygen saturation {self.oxygen_saturation} percent at it ay {self.os_rating}
+    eng: Your oxygen saturation is {} percent and it is {}
+    fil: Ang iyong ay oxygen saturation {} percent at it ay {}
   result_temp:
-    eng: Your temperature is {self.temperature} celcius and it is {self.temp_rating}
-    fil: Ang iyong ay oxygen saturation {self.temperature} celcius at it ay {self.temp_rating}
+    eng: Your temperature is {} celcius and it is {}
+    fil: Ang iyong ay oxygen saturation {} celcius at it ay {}
   result_pr:
-    eng: Your pulse rate is {self.pulse_rate} bpm and it is {self.pr_rating}
-    fil: Ang iyong ay oxygen saturation {self.pulse_rate} bpm at it ay {self.pr_rating}
+    eng: Your pulse rate is {} bpm and it is {}
+    fil: Ang iyong ay oxygen saturation {} bpm at it ay {}
 
 printing:
   prompt:
@@ -98,9 +98,5 @@ printing:
     fil: Gusto mo ba ng kopya ng iyong vital signs measurement? Maaaring pindutin ang button upang makakuha ng kopya ng resulta ng iyong vital signs
 
   thank_you_voice:
-    eng: Well done on completing your vital sign check up! We gebuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
-    fil: Tapos na ang pagkumpleto ng iyong vital sign check up! Tunay kaming nagpapasalamat sa iyo sa pagpili ng aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan
-
-  thank_you_text:
     eng: Well done on completing your vital sign check up! We gebuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
     fil: Tapos na ang pagkumpleto ng iyong vital sign check up! Tunay kaming nagpapasalamat sa iyo sa pagpili ng aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan
