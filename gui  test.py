@@ -724,7 +724,9 @@ class ThankYouPage(tk.Canvas):
     
     def thankyou(self):   
         self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
-
+        self.medbot.reset_and_logout()
+        self.root.show_homepage()
+        
 if __name__ == "__main__":
     bot = medbot.Medbot()
     root = Root(bot)

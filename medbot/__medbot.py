@@ -227,6 +227,11 @@ class Medbot:
         Reset Arduino
         '''
         self.send_command(9)
+        self.send_command(4)
+    
+    def reset_and_logout(self):
+        self.user = None
+        self.reset_arduino()
     #########################################
     #                                       #
     #           VITAL SIGN SENSORS          #
