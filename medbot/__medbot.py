@@ -35,10 +35,14 @@ class Medbot:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
-
+        
+        print('1')
         self.reset_arduino()
+        print('2')
         self.oximeter = MAX30102()
+        print('3')
         self.qrcode_scanner = cv2.VideoCapture(0)
+        print('4')
         self.printer = getUSBPrinter()(idVendor=0x28e9,
                           idProduct=0x0289,
                           inputEndPoint=0x81,
@@ -243,9 +247,10 @@ class Medbot:
         '''
         # start solenoid
         # detect air_pressure until 0
-        blood_pressure_monitor = Microlife_BTLE()
+       
         while True:
-            try:               
+            try: 
+                blood_pressure_monitor = Microlife_BTLE()              
                 blood_pressure_monitor.bluetooth_communication(blood_pressure_monitor.patient_id_callback)                          
                 latest_measurement = blood_pressure_monitor.get_measurements()[-1]
                 break
@@ -268,9 +273,10 @@ class Medbot:
         self.send_command(11)   
 
         response = self.get_arduino_response() 
+        print(response)
         while not response:
             response = self.get_arduino_response()
-
+            print(response)
         temperature = float (response) 
         return temperature      
     
@@ -395,4 +401,6 @@ class Medbot:
 
     def save_reading(self, user_id, systolic, diastolic, oxy_sat, pulse, temp):
         query = f'INSERT INTO readings(user_id, blood_pressure_systolic, blood_pressure_diastolic, blood_pressure_rating, blood_saturation, blood_saturation_rating,temperature, temperature_rating, pulse_rate, pulse_rate_rating,created_at,updated_at) VALUES({user_id}, {systolic}, {diastolic}, "{self.determine_bp(systolic, diastolic)}", {oxy_sat}, "{self.determine_os(oxy_sat)}" ,{pulse}, "{self.determine_pr(pulse)}",{temp},"{self.determine_temp(temp)}", "{datetime.now()}",  "{datetime.now()}")'
+        print(query)
         self.cursor.execute(query)
+        self.database.commit()

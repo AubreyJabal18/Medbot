@@ -107,11 +107,11 @@ text_labels:
     fil: Magsimula
 
   text2:
-    eng: "If you don't have an account \n yet, feel free to register on \n our website or simply scan \n the QR Code we've got right \n here for you."
+    eng: " If you don't have an account \n yet, feel free to register on \n our website or simply scan \n the QR Code we've got right \n here for you."
     fil: "Kung wala ka pang account,\nmagrehistro sa aming website \n o i-scan ang QR Code dito."
 
   text3:
-    eng: "Place your hands near the \nright arm of the Enhanced \nMed-Bot for the sanitation to start."
+    eng: "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
     fil: "Ilagay ang iyong kamay \nmalapit sa kanang braso \nnang Med-Bot upang \nmagsimula ang sanitasyon."
 
   text4:

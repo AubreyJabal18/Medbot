@@ -56,12 +56,10 @@ class Root(tk.Tk):
         vitals_measuring_page = VitalsMeasuringPage(self, self.medbot)
         vitals_measuring_page.pack()
     
-    def show_vitals_reading_page(self, temperature,oxygen_saturation, temp_rating, os_rating):
-        # systolic, diastolic, pulse_rate,bp_rating, pr_rating,
+    def show_vitals_reading_page(self, systolic, diastolic, pulse_rate, temperature, oxygen_saturation, bp_rating, pr_rating, temp_rating, os_rating):
         for child in self.winfo_children():
             child.destroy()
-        vitals_reading_page = VitalsReadingPage(self, self.medbot, temperature, oxygen_saturation, temp_rating, os_rating)
-        # systolic, diastolic, pulse_rate, bp_rating, pr_rating,
+        vitals_reading_page = VitalsReadingPage(self, self.medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation,bp_rating, pr_rating, temp_rating, os_rating)
         vitals_reading_page.pack()
 
     def show_thank_you_page(self):  
@@ -431,60 +429,60 @@ class VitalsMeasuringPage(tk.Canvas):
         self.medbot.speak(self.root.config['finger_prompt']['success'][self.root.language])
 
 
-    #     self.after(500, self.welcome_arm)
+        self.after(500, self.welcome_arm)
     
-    # def welcome_arm(self):
-    #     self.medbot.speak(self.root.config['arm_prompt']['position'][self.root.language])
-    #     self.medbot.speak(self.root.config['arm_prompt']['rest'][self.root.language])
+    def welcome_arm(self):
+        self.medbot.speak(self.root.config['arm_prompt']['position'][self.root.language])
+        self.medbot.speak(self.root.config['arm_prompt']['rest'][self.root.language])
 
 
-    #     self.after(500)
+        self.after(500)
 
-    #     # Detect arm position
-    #     arm_position = self.medbot.detect_arm()
-    #     while not arm_position:
-    #         self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
+        # Detect arm position
+        # arm_position = self.medbot.detect_arm()
+        # while not arm_position:
+        #     self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
 
-    #         arm_position = bot.detect_arm()
-    #     self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
-
-
-    #     self.after(500)
+        #     arm_position = bot.detect_arm()
+        # self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
 
 
-    #     self.medbot.speak(self.root.config['vital_signs_measurement']['getting_bp'][self.root.language])
+        # self.after(500)
 
 
-    #     self.medbot.start_solenoid()
+        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_bp'][self.root.language])
 
-    #     # Get temp
-    #     self.after(500, self.get_bp_and_pr)
 
-    # def get_bp_and_pr(self):
-    #     # Get Blood Pressure
-    #     self.systolic, self.diastolic, self.pulse_rate = self.medbot.start_blood_pressure_monitor()
-    #     self.bp_rating = self.medbot.determine_bp(self.systolic, self.diastolic)
-    #     print(self.systolic, self.diastolic)
-    #     print(self.bp_rating)  
+        self.medbot.start_solenoid()
 
-    #     # Get Pulse Rate
-    #     self.pr_rating = self.medbot.determine_pr(self.pulse_rate)
-    #     print(self.pulse_rate)
-    #     print(self.pr_rating)
+        # Get temp
+        self.after(500, self.get_bp_and_pr)
 
-    #     # Change the color of pr
-    #     self.after(500, self.change_box_color1)
+    def get_bp_and_pr(self):
+        # Get Blood Pressure
+        self.systolic, self.diastolic, self.pulse_rate = self.medbot.start_blood_pressure_monitor()
+        self.bp_rating = self.medbot.determine_bp(self.systolic, self.diastolic)
+        print(self.systolic, self.diastolic)
+        print(self.bp_rating)  
 
-    # # Function to change the box color of bp
-    # def change_box_color1(self):
-    #     self.itemconfig(self.box1_label, image=self.box5_tk)
+        # Get Pulse Rate
+        self.pr_rating = self.medbot.determine_pr(self.pulse_rate)
+        print(self.pulse_rate)
+        print(self.pr_rating)
+
+        # Change the color of pr
+        self.after(500, self.change_box_color1)
+
+    # Function to change the box color of bp
+    def change_box_color1(self):
+        self.itemconfig(self.box1_label, image=self.box5_tk)
                                 
-    #     # Change the color of bp
-    #     self.after(500, self.change_box_color2)
+        # Change the color of bp
+        self.after(500, self.change_box_color2)
 
-    # # Function to change the box color of pr
-    # def change_box_color2(self):
-    #     self.itemconfig(self.box2_label, image=self.box5_tk)
+    # Function to change the box color of pr
+    def change_box_color2(self):
+        self.itemconfig(self.box2_label, image=self.box5_tk)
 
         # Get temp
         self.after(500, self.get_temperature)
@@ -530,23 +528,22 @@ class VitalsMeasuringPage(tk.Canvas):
     def complete(self):
         self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])    
         
-        self.master.show_vitals_reading_page(self.temperature, self.oxygen_saturation, self.temp_rating, self.os_rating)
+        self.master.show_vitals_reading_page(self.systolic, self.diastolic, self.pulse_rate, self.temperature, self.oxygen_saturation, self.bp_rating, self.pr_rating, self.temp_rating, self.os_rating)
 
-        # self.systolic, self.diastolic, self.pulse_rate, self.bp_rating, self.pr_rating,
 
 class VitalsReadingPage(tk.Canvas):
-    def __init__(self, root: Root, bot: medbot.Medbot, temperature, oxygen_saturation, temp_rating, os_rating,**kwargs):
-        # systolic, diastolic, pulse_rate, bp_rating, pr_rating,
+    def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation,  bp_rating, pr_rating, temp_rating, os_rating,**kwargs):
         super().__init__(master = root, width=1030, height=540, **kwargs)
+
         self.medbot = bot
         self.root = root
-        # self.systolic = systolic
-        # self.diastolic = diastolic
-        # self.pulse_rate = pulse_rate
+        self.systolic = systolic
+        self.diastolic = diastolic
+        self.pulse_rate = pulse_rate
         self.temperature = temperature
         self.oxygen_saturation = oxygen_saturation
-        # self.bp_rating = bp_rating
-        # self.pr_rating = pr_rating
+        self.bp_rating = bp_rating
+        self.pr_rating = pr_rating
         self.temp_rating = temp_rating
         self.os_rating = os_rating
 
@@ -616,8 +613,8 @@ class VitalsReadingPage(tk.Canvas):
         self.text_label = self.create_text(740, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
 
 
-        # blood_pressure_reading = f"{systolic}/{diastolic}  mmHg" 
-        # self.blood_pressure_label = self.create_text(360, 230, text=blood_pressure_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
+        blood_pressure_reading = f"{systolic}/{diastolic}  mmHg" 
+        self.blood_pressure_label = self.create_text(360, 230, text=blood_pressure_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
 
 
         oxygen_saturation_reading = f"{oxygen_saturation}%" 
@@ -626,24 +623,34 @@ class VitalsReadingPage(tk.Canvas):
         temperature_reading = f"{temperature}°C" 
         self.temperature_label = self.create_text(360, 385, text=temperature_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
 
-        # pulse_rate_reading = f"{pulse_rate} bpm"
-        # self.pulse_rate_label = self.create_text(740, 385, text=pulse_rate_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
+        pulse_rate_reading = f"{pulse_rate} bpm"
+        self.pulse_rate_label = self.create_text(740, 385, text=pulse_rate_reading, font=("ROBOTO", 14, "underline bold"), fill="black")
 
         text = "PRINT RESULT?"
         self.text_label = self.create_text(455, 470, text=text, font=("ROBOTO", 12, "bold"), fill="white")
 
+
+        self.medbot.user[0]
+        self.systolic = 90
+        self.diastolic = 70
+        self.oxy_sat = 95
+        self.pulse = 80
+        self.temp = 37.5
+
+        self.medbot.save_reading(self.medbot.user[0], self.systolic, self.diastolic, self.oxy_sat, self.pulse, self.temp)
+        
         self.after(1000, self.after_init)
     
     def after_init(self):
         self.medbot.speak(self.root.config['results_prompt']['prompt'][self.root.language])
 
-        # self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language].format(str(self.systolic, self.diastolic, self.bp_rating)))
+        self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language].format(str(self.systolic), str(self.diastolic), str(self.bp_rating)))
        
         self.medbot.speak(self.root.config['results_prompt']['result_os'][self.root.language].format(str(self.oxygen_saturation), str(self.os_rating)))
      
         self.medbot.speak(self.root.config['results_prompt']['result_temp'][self.root.language].format(str(self.temperature), str(self.temp_rating)))
         
-        # self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language].format(str(self.pulse_rate, self.pr_rating)))
+        self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language].format(str(self.pulse_rate), str(self.pr_rating)))
 
         self.medbot.speak(self.root.config['printing']['prompt'][self.root.language])
         
@@ -667,8 +674,11 @@ _________________________________
       measurement results.
 
 Name: {bot.user[1]}, {bot.user[2]}
-Oxygen Saturation: {self.oxygen_saturation} % ({self.os_rating})
+Blood Pressure: {self.systolic}/{self.diastolic} mmHg ({self.bp_rating})
+Pulse Rate: {self.pulse_rate} bpm ({self.pr_rating})
 Temperature: {self.temperature} C ({self.temp_rating})
+Oxygen Saturation: {self.oxygen_saturation} % ({self.os_rating})
+
 
 _________________________________
       THANK YOU FOR USING 
@@ -681,9 +691,6 @@ _________________________________
         self.medbot.print(message)
     
         self.master.show_thank_you_page()
-        # Blood Pressure: {self.systolic}/{self.diastolic} mmHg ({self.bp_rating})
-        # Pulse Rate: {self.pulse_rate} bpm ({self.pr_rating})
-
 
 class ThankYouPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, **kwargs):
