@@ -630,14 +630,7 @@ class VitalsReadingPage(tk.Canvas):
         self.text_label = self.create_text(455, 470, text=text, font=("ROBOTO", 12, "bold"), fill="white")
 
 
-        self.medbot.user[0]
-        self.systolic = 90
-        self.diastolic = 70
-        self.oxy_sat = 95
-        self.pulse = 80
-        self.temp = 37.5
-
-        self.medbot.save_reading(self.medbot.user[0], self.systolic, self.diastolic, self.oxy_sat, self.pulse, self.temp)
+        self.medbot.save_reading(self.medbot.user[0], self.systolic, self.diastolic, self.oxygen_saturation, self.pulse_rate, self.temperature)
         
         self.after(1000, self.after_init)
     
