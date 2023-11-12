@@ -80,12 +80,12 @@ class Homepage(tk.Canvas):
 
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        self.third_image = Image.open(fr"images/medbot.png") 
-        self.third_image = self.third_image.resize((500, 500), Image.ANTIALIAS)
+        self.third_image = Image.open(fr"images/side view 2.png") 
+        self.third_image = self.third_image.resize((400, 500), Image.ANTIALIAS)
         self.third_image_tk = ImageTk.PhotoImage(self.third_image)
-        self.third_image_label = self.create_image(220, 300, image=self.third_image_tk)
+        self.third_image_label = self.create_image(220, 280, image=self.third_image_tk)
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(970, 60, image=self.logo_tk)
@@ -102,7 +102,9 @@ class Homepage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(540, 180, text=text, font=("ROBOTO", 12, "italic"), fill="white")
 
-        self.get_started_button = tk.Button(root, text="Get Started", font=("Helvetica", 24), command=self.on_get_started_click)
+        text1 = self.root.config['text_labels']['text1'][self.root.language]
+
+        self.get_started_button = tk.Button(root, text=text1, font=("Helvetica", 24), command=self.on_get_started_click)
         self.get_started_button_window = self.create_window(615, 300, anchor="nw", window=self.get_started_button)
 
         # Create a label
@@ -161,12 +163,12 @@ class ScanQRCodePage(tk.Canvas):
         self.second_image_tk = ImageTk.PhotoImage(self.second_image)
         self.second_image_label = self.create_image(750, 350, image=self.second_image_tk)
 
-        self.third_image = Image.open(fr"images/medbot.png") 
-        self.third_image = self.third_image.resize((500, 500), Image.ANTIALIAS)
+        self.third_image = Image.open(fr"images/side view 2.png") 
+        self.third_image = self.third_image.resize((400, 500), Image.ANTIALIAS)
         self.third_image_tk = ImageTk.PhotoImage(self.third_image)
-        self.third_image_label = self.create_image(220, 300, image=self.third_image_tk)
+        self.third_image_label = self.create_image(220, 280, image=self.third_image_tk)
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(970, 60, image=self.logo_tk)
@@ -183,11 +185,12 @@ class ScanQRCodePage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(540, 180, text=text, font=("ROBOTO", 12, "italic"), fill="white")
 
-        text = "If you don't have an account\nyet, feel free to register on\nour website or simply scan\nthe QR Code we've got right\nhere for you."
-        self.text_label = self.create_text(750, 350, text=text, font=("Helvetica", 18), fill="black")
-        
-        text = "Want to check your vital sign?"
-        self.text_label = self.create_text(470, 490, text=text, font=("ROBOTO", 12, "bold"), fill="white")
+        # text = "If you don't have an account\nyet, feel free to register on\nour website or simply scan\nthe QR Code we've got right\nhere for you."
+        text2 = self.root.config['text_labels']['text2'][self.root.language]
+        self.text2_label = self.create_text(750, 350, text=text2, font=("Helvetica", 18), fill="black")
+
+        # text = "Want to check your vital sign?"
+        # self.text_label = self.create_text(470, 490, text=text, font=("ROBOTO", 12, "bold"), fill="white")
 
         self.qr_code_window = None
         self.qr_code_bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4.png")
@@ -251,7 +254,7 @@ class HandSanitiationPage(tk.Canvas):
         self.bg_image1 = tk.PhotoImage(file=fr"images/Frame 4 (1).png")
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(990, 40, image=self.logo_tk)
@@ -261,7 +264,7 @@ class HandSanitiationPage(tk.Canvas):
         self.second_image_tk = ImageTk.PhotoImage(self.second_image)
         self.second_image_label = self.create_image(800, 325, image=self.second_image_tk) 
 
-        self.third_image = Image.open(fr"images/medbot.png")
+        self.third_image = Image.open(fr"images/side view 2.png")
         self.third_image = self.third_image.resize((500, 500), Image.ANTIALIAS)
         self.third_image_tk = ImageTk.PhotoImage(self.third_image)
         self.third_image_label = self.create_image(180, 440, image=self.third_image_tk) 
@@ -297,8 +300,10 @@ class HandSanitiationPage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
-        text = "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
-        self.text_label = self.create_text(425, 245, text=text, font=("Helvetica", 18), fill="black")
+        # text = "Place your hands near the \nright arm of the Enhanced \nMed-Bot, and we'll get this \nsanitation started."
+        
+        text3 = self.root.config['text_labels']['text3'][self.root.language]
+        self.text3_label = self.create_text(425, 245, text=text3, font=("Helvetica", 18), fill="black")
 
         self.after(500, self.welcome)
     
@@ -339,7 +344,7 @@ class VitalsMeasuringPage(tk.Canvas):
         self.bg_image1 = ImageTk.PhotoImage(self.image)
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(990, 40, image=self.logo_tk)
@@ -552,7 +557,7 @@ class VitalsReadingPage(tk.Canvas):
 
         self.bg_label = self.create_image(0, 0, anchor="nw", image=self.bg_image1)
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(990, 40, image=self.logo_tk)
@@ -698,7 +703,7 @@ class ThankYouPage(tk.Canvas):
         self.image2_tk = ImageTk.PhotoImage(self.image2)
         self.image2_label = self.create_image(515, 320, image=self.image2_tk) 
 
-        self.logo = Image.open(fr"images/gui_logo.png")
+        self.logo = Image.open(fr"images/gui_logo2.png")
         self.logo = self.logo.resize((70, 70), Image.ANTIALIAS)
         self.logo_tk = ImageTk.PhotoImage(self.logo)
         self.logo_label = self.create_image(990, 40, image=self.logo_tk)
@@ -711,13 +716,13 @@ class ThankYouPage(tk.Canvas):
         text = "“Your Ultimate ALL-in-ONE Healthcare Buddy”"
         self.text_label = self.create_text(515, 100, text=text, font=("ROBOTO", 14, "italic"), fill="white")
 
-        text = "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
-        self.text_label = self.create_text(515, 320, text=text, font=("ROBOTO", 20, "bold italic"), fill="black")
+        # text = "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
+        text4 = self.root.config['text_labels']['text4'][self.root.language]
+        self.text4_label = self.create_text(515, 320, text=text4, font=("ROBOTO", 20, "bold italic"), fill="black")
 
         self.after(1000, self.thankyou)
     
     def thankyou(self):   
-        self.medbot.speak('Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.')
         self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
 
 if __name__ == "__main__":
