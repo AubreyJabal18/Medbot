@@ -9,6 +9,43 @@ class Root(tk.Tk):
     # Initialize the GUI
     current_language = "English"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def __init__(self, bot):
         super().__init__()
         self.medbot = bot
@@ -419,10 +456,13 @@ class VitalsMeasuringPage(tk.Canvas):
 
         # Detect finger position until okay
         finger_position = self.medbot.detect_finger()
+        start = datetime.datetime.now()
         while not finger_position:
-            self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
-
+            if datetime.datetime.now() - start >= datetime.timedelta(seconds=10):
+                self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
+                start = datetime.datetime.now()
             finger_position = self.medbot.detect_finger()
+            start = datetime.datetime.now()
 
         #stepper clockwise
         self.medbot.lock_oximeter()

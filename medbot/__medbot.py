@@ -4,6 +4,8 @@ from serial import Serial
 from datetime import datetime
 from pyzbar.pyzbar import decode
 from escpos.connections import getUSBPrinter
+import RPi.GPIO as GPIO
+
 
 import cv2
 import numpy
@@ -30,14 +32,14 @@ class Medbot:
         )
         self.user = None
         self.cursor = self.database.cursor()
-        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        self.availabe_commands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         try:
             self.arduino = Serial('/dev/ttyACM0', 9600, timeout = 1)
         except:
             self.arduino = Serial('/dev/ttyACM1', 9600, timeout = 1)
         
         print('1')
-        # self.reset_arduino()
+        self.reset_arduino()
         print('2')
         self.oximeter = MAX30102()
         print('3')
@@ -51,6 +53,21 @@ class Medbot:
         voices = self.speaker.getProperty('voices')
         self.speaker.setProperty('rate', 150)
 
+        self.on_ongoing_bp = False
+
+        button = 38;
+        
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(button, GPIO.IN)
+
+        GPIO.add_event_detect(button, GPIO.RISING, callback=self.button_callback, bouncetime=3000)
+        
+
+    def button_callback(self, channel):
+        if self.on_going_bp:
+            self.start_solenoid()
+            self.on_ongoing_bp = False
+            
     #########################################
     #                                       #
     #            ARDUINO INTERFACE          #
@@ -222,16 +239,24 @@ class Medbot:
         else:
             self.get_arduino_response
 
-    # def reset_arduino(self):
+    # def stop_bpm(self):
+       
     #     '''
-    #     Reset Arduino
+    #     stop blood pressure sensor
     #     '''
+    #     self.send_command(15)
+
+
+    def reset_arduino(self):
+        '''
+        Reset Arduino
+        '''
     #     self.send_command(9)
-    #     self.send_command(4)
+        self.send_command(4)
     
     def reset_and_logout(self):
         self.user = None
-    #     self.reset_arduino()
+        self.reset_arduino()
     #########################################
     #                                       #
     #           VITAL SIGN SENSORS          #
@@ -252,7 +277,7 @@ class Medbot:
         '''
         # start solenoid
         # detect air_pressure until 0
-       
+        self.on_going_bp = True
         while True:
             try: 
                 blood_pressure_monitor = Microlife_BTLE()              
@@ -264,8 +289,9 @@ class Medbot:
         systolic = latest_measurement[1] 
         diastolic = latest_measurement[2] 
         pulse_rate = latest_measurement[3] 
+        self.on_going_bp = False
         return systolic, diastolic, pulse_rate 
-    
+
     def start_oximeter(self):
         while True:
             red, ir = self.oximeter.read_sequential()
