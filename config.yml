@@ -117,3 +117,120 @@ text_labels:
   text4:
     eng: "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
     fil: "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kami ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."
+
+intro_recording:
+  welcome_recording:
+    eng: recordings/eng/welcome_eng.mp3
+    fil: recordings/fil/welcome_fil.mp3
+  proceed_recording:
+    eng: recordings/eng/scan_eng.mp3
+    fil: recordings/fil/scan_fil.mp3
+
+scan_recording:
+  success_recording: 
+    eng: recordings/eng/success_welcome_eng.mp3, {}
+    fil: recordings/fil/mabuhay_fil.mp3, {}
+  fail_qrcode_recording:
+    eng: Wrong qrcode
+    fil: Mali ang iyong qrcode 
+  fail_credentials_recording:
+    eng: Credentials do not match
+    fil: Hindi tugma sa iyong credentials
+
+sanitizing_recording:
+  position_recording:
+    eng: recordings/eng/sanitizing_prompt_eng.mp3
+    fil: recordings/fil/sanitizing_prompt_fil.mp3
+  too_far_recording:
+    eng: recordings/eng/too_far.mp3
+    fil: recordings/fil/malayo_kamay.mp3
+  too_close_recording:
+    eng: recordings/eng/too_close.mp3
+    fil: recordings/fil/malapit_kamay.mp3
+  correct_position_recording:
+    eng: recordings/eng/correct_pos_sanitizer_eng.mp3
+    fil: recordings/fil/correct_pos_fik.mp3
+  success_recording:
+    eng: recordings/eng/proceeding_vtal_meas_eng.mp3
+    fil: recordings/fil/proceeding_vtal_meas_fik.mp3
+
+arm_recording:
+  position_recording:
+    eng: recordings/eng/arm_pos_eng.mp3
+    fil: recordings/fil/arm_pos_fil.mp3
+  rest_recording:
+    eng: recordings/eng/rest_correct_eng.mp3
+    fil: recordings/fil/rest_arm_fil.mp3
+  success_recording:
+    eng: recordings/eng/arm_detected_eng.mp3
+    fil: recordings/fil/arm_detected_fil.mp3
+  fail_recording:
+    eng: recordings/eng/arm_not_detected_eng.mp3
+    fil: recordings/fil/arm-not_detected_fil.mp3
+
+finger_recording:
+  position_recording:
+    eng: recordings/eng/insert_finger_eng.mp3
+    fil: recordings/fil/insert_finger_fil.mp3
+  success_recording:
+    eng: recordings/eng/locking_oxi_eng.mp3
+    fil: recordings/fil/locking_oxi_fil.mp3
+  fail_recording:
+    eng: recordings/eng/finger_not_detected_eng.mp3
+    fil: recordings/fil/finger_not_detected_fil.mp3
+
+vital_signs_measurement_recording:
+  getting_bp_recording:
+    eng: recordings/eng/getting_bp_and_pr_eng.mp3
+    fil: recordings/fil/getting_bp_and_pr_fil.mp3
+  getting_temp_recording:
+    eng: recordings/eng/getting_temp_eng.mp3
+    fil: recordings/fil/getting_temp_fil.mp3
+  getting_os_recording:
+    eng: recordings/eng/getting_oxy_eng.mp3
+    fil: recordings/fil/getting_oxy_fil.mp3
+  success_recording:
+    eng: recordings/eng/complete_vsigns_eng.mp3
+    fil: recordings/fil/complet_vsigns_fil.mp3
+
+results_recording:
+  prompt_recording:
+    eng: recordings/eng/vital_signs_measures_eng.mp3
+    fil: recordings/fil/vital_signs_measure_fil.mp3
+  result_bp_recording:
+    eng: recordings/eng/blood_pressure_is.mp3
+    fil: recordings/fil/blood_pressure_fil.mp3
+  over: recordings/uni/over.mp3
+  mmhg: recordings/uni/mmhg.mp3
+  and_it_is: recordings/eng/and_it_is_eng.mp3
+  at_ito_ay: recordings/fil/at_ito_ay.mp3
+
+  result_os_recording:
+    eng: recordings/fil/oxygen_fil.mp3
+    fil: recordings/fil/oxygen_fil.mp3
+  percert: recordings/uni/percent.mp3
+  and_it_is: recordings/eng/and_it_is_eng.mp3
+  at_ito_ay: recordings/fil/at_ito_ay.mp3
+
+  result_temp_recording:
+    eng: recordings/eng/temp_is.mp3
+    fil: recordings/fil/temp_fil.mp3
+  celcius: recordings/uni/celcius.mp3
+  and_it_is: recordings/eng/and_it_is_eng.mp3
+  at_ito_ay: recordings/fil/at_ito_ay.mp3
+
+  result_pr_recording:
+    eng: recordings/eng/pulse_rate_is.mp3
+    fil: recordings/fil/pulse_rate_fil.mp3
+  bpm: recordings/uni/bpm.mp3
+  and_it_is: recordings/eng/and_it_is_eng.mp3
+  at_ito_ay: recordings/fil/at_ito_ay.mp3
+
+printing_recording:
+  print_recoring:
+    eng: recordings/eng/print_results_eng.mp3
+    fil: recordings/fil/print_results_fil.mp3
+
+  thank_you_voice_recording:
+    eng: recordings/eng/thank_you_eng.mp3
+    fil: recordings/fil/thank_you_fil.mp3
