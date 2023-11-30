@@ -4,8 +4,9 @@ from serial import Serial
 from datetime import datetime
 from pyzbar.pyzbar import decode
 from escpos.connections import getUSBPrinter
+from pydub import AudioSegment
+from pydub.playback import play
 import RPi.GPIO as GPIO
-
 
 import cv2
 import numpy
@@ -171,8 +172,6 @@ class Medbot:
         self.send_command(14)
 
         self.wait_until_operation_completed()
-      
-  
 
         # self.send_command(12)
         # response = self.get_arduino_response()
@@ -257,6 +256,7 @@ class Medbot:
     def reset_and_logout(self):
         self.user = None
         self.reset_arduino()
+
     #########################################
     #                                       #
     #           VITAL SIGN SENSORS          #
@@ -393,6 +393,14 @@ class Medbot:
         '''
         self.speaker.say(text)
         self.speaker.runAndWait()
+
+    def speak_using_file(self, file: str):
+        '''
+            Speak using a recording file
+        '''
+        file_type = file.split('.')[-1]
+        recording = AudioSegment.from_file(file, format=file_type)
+        play(recording)
 
     def determine_bp(self, systolic, diastolic):
         if systolic >= 90 and systolic <= 120 and diastolic >= 60 and diastolic <= 80:
