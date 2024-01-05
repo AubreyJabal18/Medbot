@@ -196,8 +196,8 @@ class ScanQRCodePage(tk.Canvas):
         self.after(500, self.welcome)
         
     def welcome(self):
-        self.medbot.speak(self.root.config['intro_prompt']['welcome'][self.root.language])
-        self.medbot.speak(self.root.config['intro_prompt']['proceed'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['intro_recording']['welcome_recording'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['intro_recording']['proceed_recording'][self.root.language])
 
         self.after(50, self.on_qr_code_click)
 
@@ -216,7 +216,7 @@ class ScanQRCodePage(tk.Canvas):
             
             if ready and credentials[0] != 'medbot':
     
-                self.medbot.speak(self.root.config['scan_prompt']['fail_qrcode'][self.root.language])
+                self.medbot.speak_using_file(self.root.config['scan_recording']['fail_qrcode_recording'][self.root.language])
 
                 credentials[0] = None
                 ready = False
@@ -230,8 +230,10 @@ class ScanQRCodePage(tk.Canvas):
                 
                 if not self.medbot.login(user_id, password):
                     
-                    self.medbot.speak(self.root.config['scan_prompt']['fail_credentials'][self.root.language])
+                    self.medbot.speak_using_file(self.root.config['scan_recording']['fail_credentials_recording'][self.root.language])
 
+                    self.medbot.speak_using_file(self.root.config['scan_recording']['fail_qrcode_recording'][self.root.language])
+                    
                     credentials[0] = None
                     ready = False
                     last_scaned = datetime.datetime.now()
@@ -239,7 +241,8 @@ class ScanQRCodePage(tk.Canvas):
                     continue
                 success = True
 
-        self.medbot.speak(self.root.config['scan_prompt']['success'][self.root.language].format(self.medbot.user[1]))
+        self.medbot.speak_using_file(self.root.config['scan_recording']['success_recording'][self.root.language])
+        self.medbot.speak((self.medbot.user[1]))
 
         self.master.show_sanitation_page()
 
@@ -306,27 +309,31 @@ class HandSanitiationPage(tk.Canvas):
         self.after(500, self.welcome)
     
     def welcome(self):
-        self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['sanitizing_recording']['position_recording'][self.root.language])
 
         self.after(500, self.hand_sanitation)
 
     def hand_sanitation(self):
         hand_position = self.medbot.detect_hand()
+        
         while hand_position != '91':
+            print(hand_position)
             if hand_position == '95':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+                self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_close_recording'][self.root.language])
 
             elif hand_position == '96':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
+                self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_far_recording'][self.root.language])
 
             hand_position = self.medbot.detect_hand()
 
-        self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['sanitizing_recording']['correct_position_recording'][self.root.language])
+
+        
 
         # Start sanitizer
         self.medbot.start_hand_santizer(wait_until_completed=True)
 
-        self.medbot.speak(self.root.config['sanitizing_prompt']['success'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['sanitizing_recording']['success_recording'][self.root.language])
 
         
         self.master.show_vitals_measuring_page()
@@ -414,46 +421,46 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500, self.welcome_os)
     
     def welcome_os(self):
-        self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['finger_recording']['position_recording'][self.root.language])
 
 
-        # Detect finger position until okay
+       #Detect finger position until okay
         finger_position = self.medbot.detect_finger()
         start = datetime.datetime.now()
         while not finger_position:
-            if datetime.datetime.now() - start >= datetime.timedelta(seconds=10):
-                self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
+            if datetime.datetime.now() - start >= datetime.timedelta(seconds=5):
+                self.medbot.speak_using_file(self.root.config['finger_recording']['fail_recording'][self.root.language])
                 start = datetime.datetime.now()
             finger_position = self.medbot.detect_finger()
             start = datetime.datetime.now()
 
         #stepper clockwise
         self.medbot.lock_oximeter()
-        self.medbot.speak(self.root.config['finger_prompt']['success'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['finger_recording']['success_recording'][self.root.language])
 
 
         self.after(500, self.welcome_arm)
     
     def welcome_arm(self):
-        self.medbot.speak(self.root.config['arm_prompt']['position'][self.root.language])
-        self.medbot.speak(self.root.config['arm_prompt']['rest'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['arm_recording']['position_recording'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['arm_recording']['rest_recording'][self.root.language])
 
 
         self.after(500)
 
-        # Detect arm position
+        # #Detect arm position
         # arm_position = self.medbot.detect_arm()
         # while not arm_position:
-        #     self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
+        #     self.medbot.speak_using_file(self.root.config['arm_recording']['fail_recording'][self.root.language])
 
         #     arm_position = bot.detect_arm()
-        # self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
+        # self.medbot.speak_using_file(self.root.config['arm_recording']['success_recording'][self.root.language])
 
 
         # self.after(500)
 
 
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_bp'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_bp_recording'][self.root.language])
 
 
         self.medbot.start_solenoid()
@@ -492,7 +499,7 @@ class VitalsMeasuringPage(tk.Canvas):
 
     def get_temperature(self):
         # Get Temperature
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_temp'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_temp_recording'][self.root.language])
 
         self.temperature = self.medbot.get_temperature()
         self.temp_rating = self.medbot.determine_temp(self.temperature)
@@ -510,7 +517,7 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500, self.get_oxygen_saturation)
 
     def get_oxygen_saturation(self):
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_os_recording'][self.root.language])
 
         self.oxygen_saturation = self.medbot.start_oximeter()  
         self.os_rating = self.medbot.determine_os(self.oxygen_saturation)
@@ -529,7 +536,7 @@ class VitalsMeasuringPage(tk.Canvas):
 
     # Perform final actions after both temp and os readings
     def complete(self):
-        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])    
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['success_recording'][self.root.language])    
         
         self.master.show_vitals_reading_page(self.systolic, self.diastolic, self.pulse_rate, self.temperature, self.oxygen_saturation, self.bp_rating, self.pr_rating, self.temp_rating, self.os_rating)
 
@@ -612,7 +619,7 @@ class VitalsReadingPage(tk.Canvas):
         text = "TEMPERATURE"
         self.text_label = self.create_text(370, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
 
-        text = "PULSE"
+        text = "PULSE RATE"
         self.text_label = self.create_text(740, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
 
 
@@ -638,7 +645,7 @@ class VitalsReadingPage(tk.Canvas):
         self.after(1000, self.after_init)
     
     def after_init(self):
-        self.medbot.speak(self.root.config['results_prompt']['prompt'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['results_recording']['prompt_recording'][self.root.language])
 
         self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language].format(str(self.systolic), str(self.diastolic), str(self.bp_rating)))
        
@@ -648,7 +655,7 @@ class VitalsReadingPage(tk.Canvas):
         
         self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language].format(str(self.pulse_rate), str(self.pr_rating)))
 
-        self.medbot.speak(self.root.config['printing']['prompt'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['printing_recording']['print_recording'][self.root.language])
         
 
     def on_red_button_click(self):
@@ -726,7 +733,7 @@ class ThankYouPage(tk.Canvas):
         self.after(1000, self.thankyou)
     
     def thankyou(self):   
-        self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['printing_recording']['thank_you_voice_recording'][self.root.language])
         self.medbot.reset_and_logout()
         self.root.show_homepage()
 

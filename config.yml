@@ -1,79 +1,79 @@
 active_language: eng
 
-intro_prompt:
-  welcome:
-    eng: Hi, I am Enhanced Med-Bot. Your over all healthcare buddy
-    fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha nang vital signs measurements.
-  proceed:
-    eng: To proceed please scan your qrcode
-    fil: Para makakuha nang vital signs measurement, maaaring i-scan ang inyong qrcode.
+# intro_prompt:
+#   welcome:
+#     eng: Hi, I am Enhanced Med-Bot. Your over all healthcare buddy
+#     fil: Magandang araw, Ako si Enhanced Med-Bot. Ang inyong kaibigan sa pagkuha nang vital signs measurements.
+#   proceed:
+#     eng: To proceed please scan your qrcode
+#     fil: Para makakuha nang vital signs measurement, maaaring i-scan ang inyong qrcode.
 
-scan_prompt:
-  success: 
-    eng: Welcome, {}
-    fil: Mabuhay, {}
-  fail_qrcode:
-    eng: Wrong qrcode
-    fil: Mali ang iyong qrcode 
-  fail_credentials:
-    eng: Credentials do not match
-    fil: Hindi tugma sa iyong credentials
+# scan_prompt:
+#   success: 
+#     eng: Welcome, {}
+#     fil: Mabuhay, {}
+#   fail_qrcode:
+#     eng: Wrong qrcode
+#     fil: Mali ang iyong qrcode 
+#   fail_credentials:
+#     eng: Credentials do not match
+#     fil: Hindi tugma sa iyong credentials
 
-sanitizing_prompt:
-  position:
-    eng: Please put your hand in front of the sanitizer
-    fil: Maaaring ilagay ang inyong kamay sa harap nang sanitizer
-  too_far:
-    eng: Your hand is too far
-    fil: Malayo ang iyong kamay
-  too_close:
-    eng: Your hand is too close
-    fil: Malapit ang inyong kamay
-  correct_position:
-    eng: Please keep your hands stay still. Now starting sanitizer
-    fil: Panatilihin ang mga kamay at magsisimula nang mag sanitize
-  success:
-    eng: Sanitizing complete. Proceeding to vital signs measurement
-    fil: tapos na ang sanitation. Magpatuloy na sa pagkuha nang vital signs
+# sanitizing_prompt:
+#   position:
+#     eng: Please put your hand in front of the sanitizer
+#     fil: Maaaring ilagay ang inyong kamay sa harap nang sanitizer
+#   too_far:
+#     eng: Your hand is too far
+#     fil: Malayo ang iyong kamay
+#   too_close:
+#     eng: Your hand is too close
+#     fil: Malapit ang inyong kamay
+#   correct_position:
+#     eng: Please keep your hands stay still. Now starting sanitizer
+#     fil: Panatilihin ang mga kamay at magsisimula nang mag sanitize
+#   success:
+#     eng: Sanitizing complete. Proceeding to vital signs measurement
+#     fil: tapos na ang sanitation. Magpatuloy na sa pagkuha nang vital signs
   
-arm_prompt:
-  position:
-    eng: Proceeding to vital signs measurement. Please position your arm properly
-    fil: Maaaring ilagay ang inyong braso nang maayos
-  rest:
-    eng: Please rest your arm correctly
-    fil: Maaaring ipahinga ang inyong braso nang tama
-  success:
-    eng: Your arm was detected
-    fil: Natukoy ang iyong braso
-  fail:
-    eng: Your arm is not detected
-    fil: Hindi matukoy ang iyong braso
+# arm_prompt:
+#   position:
+#     eng: Proceeding to vital signs measurement. Please position your arm properly
+#     fil: Maaaring ilagay ang inyong braso nang maayos
+#   rest:
+#     eng: Please rest your arm correctly
+#     fil: Maaaring ipahinga ang inyong braso nang tama
+#   success:
+#     eng: Your arm was detected
+#     fil: Natukoy ang iyong braso
+#   fail:
+#     eng: Your arm is not detected
+#     fil: Hindi matukoy ang iyong braso
 
-finger_prompt:
-  position:
-    eng: Please insert your finger on the oximeter
-    fil: Maaaring ilagay ang inyong daliri sa oximeter
-  success:
-    eng: Locking Oximeter, please do not remove your finger
-    fil: Isasarado na ang oximeter, pakiusap huwag alisin ang iyong daliri
-  fail:
-    eng: Finger not detected
-    fil: Hindi matukoy ang iyong daliri
+# finger_prompt:
+#   position:
+#     eng: Please insert your finger on the oximeter
+#     fil: Maaaring ilagay ang inyong daliri sa oximeter
+#   success:
+#     eng: Locking Oximeter, please do not remove your finger
+#     fil: Isasarado na ang oximeter, pakiusap huwag alisin ang iyong daliri
+#   fail:
+#     eng: Finger not detected
+#     fil: Hindi matukoy ang iyong daliri
 
-vital_signs_measurement:
-  getting_bp:
-    eng: Please stay still. Now getting your Blood Pressure and Pulse rate
-    fil: Manatili lamang, Ngayon ay kukunin na ang iyong Blood Pressure at Pulse rate
-  getting_temp:
-    eng: Now getting you temperature
-    fil: Ngayon ay kukunin na ang iyong temperatura
-  getting_os:
-    eng: Please stay still. Now getting your oxygen saturation
-    fil: Manatili lamang, Ngayon ay kukunin na ang iyong oxygen saturation
-  success:
-    eng: Vital signs measurement has completed
-    fil: tapos na ang pagkuha nang iyong vital signs measurement
+# vital_signs_measurement:
+#   getting_bp:
+#     eng: Please stay still. Now getting your Blood Pressure and Pulse rate
+#     fil: Manatili lamang, Ngayon ay kukunin na ang iyong Blood Pressure at Pulse rate
+#   getting_temp:
+#     eng: Now getting you temperature
+#     fil: Ngayon ay kukunin na ang iyong temperatura
+#   getting_os:
+#     eng: Please stay still. Now getting your oxygen saturation
+#     fil: Manatili lamang, Ngayon ay kukunin na ang iyong oxygen saturation
+#   success:
+#     eng: Vital signs measurement has completed
+#     fil: tapos na ang pagkuha nang iyong vital signs measurement
 
 results_prompt:
   prompt:
@@ -92,14 +92,14 @@ results_prompt:
     eng: Your pulse rate is {} bpm and it is {}
     fil: Ang iyong pulse rate ay {} bpm at ito ay {}
 
-printing:
-  prompt:
-    eng: Do you want to print your vital signs measurement? Click the button to print your results.
-    fil: Gusto mo ba nang kopya nang iyong vital signs measurement? Maaaring pindutin ang button upang makakuha nang kopya nang resulta nang iyong vital signs
+# printing:
+#   prompt:
+#     eng: Do you want to print your vital signs measurement? Click the button to print your results.
+#     fil: Gusto mo ba nang kopya nang iyong vital signs measurement? Maaaring pindutin ang button upang makakuha nang kopya nang resulta nang iyong vital signs
 
-  thank_you_voice:
-    eng: Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
-    fil: Tapos na ang pagkumpleto nang iyong vital sign check up! Kami ay nagpapasalamat sa iyong pagpili nang aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan.
+#   thank_you_voice:
+#     eng: Well done on completing your vital sign check up! We genuinely thank you for choosing our Med-Bot and allowing us to assist you in monitoring your well-being.
+#     fil: Tapos na ang pagkumpleto nang iyong vital sign check up! Kami ay nagpapasalamat sa iyong pagpili nang aming Med-Bot at pagpapahintulot sa amin na tulungan ka sa pagsubaybay sa iyong kagalingan.
 
 text_labels:
   text1:
@@ -118,119 +118,124 @@ text_labels:
     eng: "Well done on completing your vital sign \ncheck up! We genuinely thank you for \nchoosing our Med-Bot and allowing us to \nassist you in monitoring your well-being."
     fil: "Tapos na ang pagkumpleto nang iyong vital \nsign check up! Kami ay nagpapasalamat sa \niyong pagpili nang aming Med-Bot at pagpa-\npahintulot sa amin na tulungan ka sa \npagsubaybay sa iyong kagalingan."
 
+
 intro_recording:
   welcome_recording:
-    eng: recordings/eng/welcome_eng.mp3
-    fil: recordings/fil/welcome_fil.mp3
+    eng: Records/Eng/welcome_eng_1.mp3
+    fil: Records/Fil/welcome_fil_1.mp3
   proceed_recording:
-    eng: recordings/eng/scan_eng.mp3
-    fil: recordings/fil/scan_fil.mp3
+    eng: Records/Eng/scan_eng_1.mp3
+    fil: Records/Fil/scan_fil_1.mp3
 
 scan_recording:
   success_recording: 
-    eng: recordings/eng/success_welcome_eng.mp3, {}
-    fil: recordings/fil/mabuhay_fil.mp3, {}
+    eng: Records/Eng/success_welcome_eng_1.mp3
+    fil: Records/Fil/mabuhay_fil_1.mp3
   fail_qrcode_recording:
-    eng: Wrong qrcode
-    fil: Mali ang iyong qrcode 
+    eng: Records/Eng/wrong_eng.mp3
+    fil: Records/Fil/wrong_fil.mp3
   fail_credentials_recording:
-    eng: Credentials do not match
-    fil: Hindi tugma sa iyong credentials
+    eng: Records/Eng/credentials_eng.mp3
+    fil: Records/Fil/credentials_fil.mp3
 
 sanitizing_recording:
   position_recording:
-    eng: recordings/eng/sanitizing_prompt_eng.mp3
-    fil: recordings/fil/sanitizing_prompt_fil.mp3
+    eng: Records/Eng/sanitizing_prompt_eng.mp3
+    fil: Records/Fil/sanitizing_prompt_fil_1.mp3
   too_far_recording:
-    eng: recordings/eng/too_far.mp3
-    fil: recordings/fil/malayo_kamay.mp3
+    eng: Records/Eng/too_far.mp3
+    fil: Records/Fil/malayo_kamay_1.mp3
   too_close_recording:
-    eng: recordings/eng/too_close.mp3
-    fil: recordings/fil/malapit_kamay.mp3
+    eng: Records/Eng/too_close.mp3
+    fil: Records/Fil/malapit_kamay_1.mp3
   correct_position_recording:
-    eng: recordings/eng/correct_pos_sanitizer_eng.mp3
-    fil: recordings/fil/correct_pos_fik.mp3
+    eng: Records/Eng/correct_pos_sanitizer_eng.mp3
+    fil: Records/Fil/correct_pos_fil_1.mp3
   success_recording:
-    eng: recordings/eng/proceeding_vtal_meas_eng.mp3
-    fil: recordings/fil/proceeding_vtal_meas_fik.mp3
+    eng: Records/Eng/proceeding_vtal_meas_eng_1.mp3
+    fil: Records/Fil/proceeding_vtal_meas_fil_1.mp3
 
 arm_recording:
   position_recording:
-    eng: recordings/eng/arm_pos_eng.mp3
-    fil: recordings/fil/arm_pos_fil.mp3
+    eng: Records/Eng/arm_pos_eng_1.mp3
+    fil: Records/Fil/arm_pos_fil_1.mp3
   rest_recording:
-    eng: recordings/eng/rest_correct_eng.mp3
-    fil: recordings/fil/rest_arm_fil.mp3
+    eng: Records/Eng/rest_correct_eng_1.mp3
+    fil: Records/Fil/rest_arm_fil_1.mp3
   success_recording:
-    eng: recordings/eng/arm_detected_eng.mp3
-    fil: recordings/fil/arm_detected_fil.mp3
+    eng: Records/Eng/arm_detected_eng_1.mp3
+    fil: Records/Fil/arm_detected_fil_1.mp3
   fail_recording:
-    eng: recordings/eng/arm_not_detected_eng.mp3
-    fil: recordings/fil/arm-not_detected_fil.mp3
+    eng: Records/Eng/arm_not_detected_eng_1.mp3
+    fil: Records/Fil/arm_not_detected_fil_1.mp3
 
 finger_recording:
   position_recording:
-    eng: recordings/eng/insert_finger_eng.mp3
-    fil: recordings/fil/insert_finger_fil.mp3
+    eng: Records/Eng/insert_finger_eng_1.mp3
+    fil: Records/Fil/insert_finger_fil_1.mp3
   success_recording:
-    eng: recordings/eng/locking_oxi_eng.mp3
-    fil: recordings/fil/locking_oxi_fil.mp3
+    eng: Records/Eng/locking_oxi_eng_1.mp3
+    fil: Records/Fil/locking_oxi_fil_1.mp3
   fail_recording:
-    eng: recordings/eng/finger_not_detected_eng.mp3
-    fil: recordings/fil/finger_not_detected_fil.mp3
+    eng: Records/Eng/finger_not_detected_eng_1.mp3
+    fil: Records/Fil/finger_not_detected_fil_1.mp3
 
 vital_signs_measurement_recording:
   getting_bp_recording:
-    eng: recordings/eng/getting_bp_and_pr_eng.mp3
-    fil: recordings/fil/getting_bp_and_pr_fil.mp3
+    eng: Records/Eng/getting_bp_and_pr_eng_1.mp3
+    fil: Records/Fil/getting_bp_and_pr_fil_1.mp3
   getting_temp_recording:
-    eng: recordings/eng/getting_temp_eng.mp3
-    fil: recordings/fil/getting_temp_fil.mp3
+    eng: Records/Eng/getting_temp_eng_1.mp3
+    fil: Records/Fil/getting_temp_fil_1.mp3
   getting_os_recording:
-    eng: recordings/eng/getting_oxy_eng.mp3
-    fil: recordings/fil/getting_oxy_fil.mp3
+    eng: Records/Eng/getting_oxy_eng_1.mp3
+    fil: Records/Fil/getting_oxy_fil_1.mp3
   success_recording:
-    eng: recordings/eng/complete_vsigns_eng.mp3
-    fil: recordings/fil/complet_vsigns_fil.mp3
+    eng: Records/Eng/complete_vsigns_eng_1.mp3
+    fil: Records/Fil/complet_vsigns_fil_1.mp3
 
 results_recording:
   prompt_recording:
-    eng: recordings/eng/vital_signs_measures_eng.mp3
-    fil: recordings/fil/vital_signs_measure_fil.mp3
+    eng: Records/Eng/vital_signs_measures_eng_1.mp3
+    fil: Records/Fil/vital_signs_measure_fil_1.mp3
   result_bp_recording:
-    eng: recordings/eng/blood_pressure_is.mp3
-    fil: recordings/fil/blood_pressure_fil.mp3
-  over: recordings/uni/over.mp3
-  mmhg: recordings/uni/mmhg.mp3
-  and_it_is: recordings/eng/and_it_is_eng.mp3
-  at_ito_ay: recordings/fil/at_ito_ay.mp3
+    eng: Records/Eng/blood_pressure_eng_1.mp3
+    fil: Records/Fil/blood_pressure_fil_1.mp3
+  over: Records/Uni/over_1.mp3
+  mmhg: Records/Uni/mmhg_1.mp3
+  bp_rating_result:
+    eng: Records/Uni/and_it_is_1.mp3
+    fil: Records/Uni/at_ito_ay_1.mp3
 
   result_os_recording:
-    eng: recordings/fil/oxygen_fil.mp3
-    fil: recordings/fil/oxygen_fil.mp3
-  percert: recordings/uni/percent.mp3
-  and_it_is: recordings/eng/and_it_is_eng.mp3
-  at_ito_ay: recordings/fil/at_ito_ay.mp3
+    eng: Records/Eng/oxygen_is_1.mp3
+    fil: Records/Fil/oxygen_fil_1.mp3
+  percent: Records/Uni/percent_1.mp3
+  os_rating_result:
+    eng: Records/Uni/and_it_is_1.mp3
+    fil: Records/Uni/at_ito_ay_1.mp3
 
   result_temp_recording:
-    eng: recordings/eng/temp_is.mp3
-    fil: recordings/fil/temp_fil.mp3
-  celcius: recordings/uni/celcius.mp3
-  and_it_is: recordings/eng/and_it_is_eng.mp3
-  at_ito_ay: recordings/fil/at_ito_ay.mp3
+    eng: Records/Eng/temp_is_1.mp3
+    fil: Records/Fil/temp_fil_1.mp3
+  celcius: Records/Uni/celcius_1.mp3
+  temp_rating_result:
+    eng: Records/Uni/and_it_is_1.mp3
+    fil: Records/Uni/at_ito_ay_1.mp3
 
   result_pr_recording:
-    eng: recordings/eng/pulse_rate_is.mp3
-    fil: recordings/fil/pulse_rate_fil.mp3
-  bpm: recordings/uni/bpm.mp3
-  and_it_is: recordings/eng/and_it_is_eng.mp3
-  at_ito_ay: recordings/fil/at_ito_ay.mp3
+    eng: Records/Eng/pulse_rate_is_1.mp3
+    fil: Records/Fil/pulse_rate_fil_1.mp3
+  bpm: Records/Uni/bpm_1.mp3
+  pr_rating_result:
+    eng: Records/Uni/and_it_is_1.mp3
+    fil: Records/Uni/at_ito_ay_1.mp3
 
 printing_recording:
-  print_recoring:
-    eng: recordings/eng/print_results_eng.mp3
-    fil: recordings/fil/print_results_fil.mp3
+  print_recording:
+    eng: Records/Eng/print_results_eng_1.mp3
+    fil: Records/Fil/print_results_fil_1.mp3
 
   thank_you_voice_recording:
-    eng: recordings/eng/thank_you_eng.mp3
-    fil: recordings/fil/thank_you_fil.mp3
+    eng: Records/Eng/thank_you_eng_1.mp3
+    fil: Records/Fil/thank_you_fil_1.mp3
