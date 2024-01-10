@@ -313,7 +313,24 @@ class Medbot:
         if temperature > 39:
             self.get_temperature()
 
-        return temperature      
+        return temperature 
+
+    
+    # def get_temperature(self):
+    #     self.send_command(11)   
+
+    #     response = self.get_arduino_response() 
+    #     print(response)
+    #     if not response:            
+    #         while not response:
+    #             response = self.get_arduino_response()
+    #             print(response)
+    #     temperature = float (response) 
+        
+    #     if temperature > 39:
+    #         self.get_temperature()
+
+    #     return temperature      
     
     #########################################
     #                                       #
