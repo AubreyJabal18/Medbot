@@ -5,6 +5,18 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import time
 
+
+all_process_start = datetime.datetime.now()
+all_process_end = datetime.datetime.now()
+measurement_start = datetime.datetime.now()
+measurement_end = datetime.datetime.now()
+sending_data_start = datetime.datetime.now()
+sending_data_end = datetime.datetime.now()
+
+start_time = datetime.datetime.now()
+last_speak = datetime.datetime.now()
+
+
 class Root(tk.Tk):
     # Initialize the GUI
     current_language = "English"
@@ -22,6 +34,10 @@ class Root(tk.Tk):
         self.show_homepage()
 
         self.mainloop()
+
+        global all_process_start
+        all_process_start = datetime.datetime.now()
+
 
     def update_language(self, language):
         self.config['active_language'] = language
@@ -73,6 +89,7 @@ class Homepage(tk.Canvas):
         super().__init__(root, width=1030, height=540, **kwargs)
         self.medbot = bot
         self.root = root
+        print(self.root.medbot.user)
      
         self.bg_image1 = ImageTk.PhotoImage(file=fr"images/Frame 4 (1).png")
 
@@ -144,6 +161,9 @@ class Homepage(tk.Canvas):
             self.label.config(text="Pindutin ang Button para magpalit ng Wika")
 
     def on_get_started_click(self):
+        global all_process_start
+        all_process_start = datetime.datetime.now()
+        print(self.medbot.user)
         self.master.show_scan_page()
 
 class ScanQRCodePage(tk.Canvas):
@@ -196,15 +216,18 @@ class ScanQRCodePage(tk.Canvas):
         self.after(500, self.welcome)
         
     def welcome(self):
-        self.medbot.speak(self.root.config['intro_prompt']['welcome'][self.root.language])
-        self.medbot.speak(self.root.config['intro_prompt']['proceed'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['intro_recording']['welcome_recording'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['intro_recording']['proceed_recording'][self.root.language])
 
         self.after(50, self.on_qr_code_click)
 
     def on_qr_code_click(self):
         success = False
-        ready = True
+        ready = False
+        
         last_scaned = datetime.datetime.now()
+        print(success)
+
         while not success:
             if not ready:
                 elapse_time = datetime.datetime.now() - last_scaned
@@ -212,11 +235,12 @@ class ScanQRCodePage(tk.Canvas):
                     ready = True
 
             qr_data = self.medbot.scan_qrcode()
+            print(qr_data)
             credentials = qr_data.split(' ')
             
             if ready and credentials[0] != 'medbot':
     
-                self.medbot.speak(self.root.config['scan_prompt']['fail_qrcode'][self.root.language])
+                self.medbot.speak_using_file(self.root.config['scan_recording']['fail_qrcode_recording'][self.root.language])
 
                 credentials[0] = None
                 ready = False
@@ -230,8 +254,10 @@ class ScanQRCodePage(tk.Canvas):
                 
                 if not self.medbot.login(user_id, password):
                     
-                    self.medbot.speak(self.root.config['scan_prompt']['fail_credentials'][self.root.language])
+                    self.medbot.speak_using_file(self.root.config['scan_recording']['fail_credentials_recording'][self.root.language])
 
+                    self.medbot.speak_using_file(self.root.config['scan_recording']['fail_qrcode_recording'][self.root.language])
+                    
                     credentials[0] = None
                     ready = False
                     last_scaned = datetime.datetime.now()
@@ -239,7 +265,8 @@ class ScanQRCodePage(tk.Canvas):
                     continue
                 success = True
 
-        self.medbot.speak(self.root.config['scan_prompt']['success'][self.root.language].format(self.medbot.user[1]))
+        self.medbot.speak_using_file(self.root.config['scan_recording']['success_recording'][self.root.language])
+        self.medbot.speak((self.medbot.user[1]))
 
         self.master.show_sanitation_page()
 
@@ -306,27 +333,53 @@ class HandSanitiationPage(tk.Canvas):
         self.after(500, self.welcome)
     
     def welcome(self):
-        self.medbot.speak(self.root.config['sanitizing_prompt']['position'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['sanitizing_recording']['position_recording'][self.root.language])
 
         self.after(500, self.hand_sanitation)
 
+    # def hand_sanitation(self):
+    #     hand_position = self.medbot.detect_hand()
+        
+    #     while hand_position != '91':
+    #         print(hand_position)
+    #         if hand_position == '95':
+    #             self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_close_recording'][self.root.language])
+
+    #         elif hand_position == '96':
+    #             self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_far_recording'][self.root.language])
+
+    #         hand_position = self.medbot.detect_hand()
+
+    #     self.medbot.speak_using_file(self.root.config['sanitizing_recording']['correct_position_recording'][self.root.language])
+
+
+
     def hand_sanitation(self):
         hand_position = self.medbot.detect_hand()
-        while hand_position != '91':
-            if hand_position == '95':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_close'][self.root.language])
+        
+        global start_time 
+        global last_speak 
 
-            elif hand_position == '96':
-                self.medbot.speak(self.root.config['sanitizing_prompt']['too_far'][self.root.language])
-
+        while True:
             hand_position = self.medbot.detect_hand()
+            print(hand_position)
 
-        self.medbot.speak(self.root.config['sanitizing_prompt']['correct_position'][self.root.language])
+            if hand_position == '95':
+                if datetime.datetime.now() - last_speak >= datetime.timedelta(seconds=5):
+                    self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_close_recording'][self.root.language])
+                    last_speak = datetime.datetime.now()
+            elif hand_position == '96':
+                if datetime.datetime.now() - last_speak >= datetime.timedelta(seconds=5):
+                    self.medbot.speak_using_file(self.root.config['sanitizing_recording']['too_far_recording'][self.root.language])
+                    last_speak = datetime.datetime.now()
+            elif hand_position == '91':
+                self.medbot.speak_using_file(self.root.config['sanitizing_recording']['correct_position_recording'][self.root.language])
+                break
 
         # Start sanitizer
         self.medbot.start_hand_santizer(wait_until_completed=True)
 
-        self.medbot.speak(self.root.config['sanitizing_prompt']['success'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['sanitizing_recording']['success_recording'][self.root.language])
 
         
         self.master.show_vitals_measuring_page()
@@ -414,46 +467,48 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500, self.welcome_os)
     
     def welcome_os(self):
-        self.medbot.speak(self.root.config['finger_prompt']['position'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['finger_recording']['position_recording'][self.root.language])
 
 
-        # Detect finger position until okay
+       #Detect finger position until okay
         finger_position = self.medbot.detect_finger()
         start = datetime.datetime.now()
         while not finger_position:
-            if datetime.datetime.now() - start >= datetime.timedelta(seconds=10):
-                self.medbot.speak(self.root.config['finger_prompt']['fail'][self.root.language])
-                start = datetime.datetime.now()
             finger_position = self.medbot.detect_finger()
-            start = datetime.datetime.now()
+            print(finger_position)
 
+            if datetime.datetime.now() - start >= datetime.timedelta(seconds=3):
+                self.medbot.speak_using_file(self.root.config['finger_recording']['fail_recording'][self.root.language])
+                start = datetime.datetime.now()
+            
         #stepper clockwise
         self.medbot.lock_oximeter()
-        self.medbot.speak(self.root.config['finger_prompt']['success'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['finger_recording']['success_recording'][self.root.language])
 
 
         self.after(500, self.welcome_arm)
     
     def welcome_arm(self):
-        self.medbot.speak(self.root.config['arm_prompt']['position'][self.root.language])
-        self.medbot.speak(self.root.config['arm_prompt']['rest'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['arm_recording']['position_recording'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['arm_recording']['rest_recording'][self.root.language])
 
 
         self.after(500)
 
-        # Detect arm position
+        # #Detect arm position
         # arm_position = self.medbot.detect_arm()
         # while not arm_position:
-        #     self.medbot.speak(self.root.config['arm_prompt']['fail'][self.root.language])
+        #     self.medbot.speak_using_file(self.root.config['arm_recording']['fail_recording'][self.root.language])
 
         #     arm_position = bot.detect_arm()
-        # self.medbot.speak(self.root.config['arm_prompt']['success'][self.root.language])
+        # self.medbot.speak_using_file(self.root.config['arm_recording']['success_recording'][self.root.language])
 
 
         # self.after(500)
 
 
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_bp'][self.root.language])
+
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_bp_recording'][self.root.language])
 
 
         self.medbot.start_solenoid()
@@ -461,7 +516,15 @@ class VitalsMeasuringPage(tk.Canvas):
         # Get temp
         self.after(500, self.get_bp_and_pr)
 
+# start = datetime.datetime.now()
+# print(start)
+
+
     def get_bp_and_pr(self):
+
+        global measurement_start
+        measurement_start = datetime.datetime.now()
+
         # Get Blood Pressure
         self.systolic, self.diastolic, self.pulse_rate = self.medbot.start_blood_pressure_monitor()
         self.bp_rating = self.medbot.determine_bp(self.systolic, self.diastolic)
@@ -492,7 +555,7 @@ class VitalsMeasuringPage(tk.Canvas):
 
     def get_temperature(self):
         # Get Temperature
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_temp'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_temp_recording'][self.root.language])
 
         self.temperature = self.medbot.get_temperature()
         self.temp_rating = self.medbot.determine_temp(self.temperature)
@@ -510,7 +573,7 @@ class VitalsMeasuringPage(tk.Canvas):
         self.after(500, self.get_oxygen_saturation)
 
     def get_oxygen_saturation(self):
-        self.medbot.speak(self.root.config['vital_signs_measurement']['getting_os'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['getting_os_recording'][self.root.language])
 
         self.oxygen_saturation = self.medbot.start_oximeter()  
         self.os_rating = self.medbot.determine_os(self.oxygen_saturation)
@@ -527,12 +590,30 @@ class VitalsMeasuringPage(tk.Canvas):
         # Perform final actions after printing os rating
         self.after(500, self.complete)
 
+        global measurement_start
+        global measurement_end
+        measurement_end = datetime.datetime.now()
+        measurement_elapsed = measurement_end - measurement_start
+        print(f' Measurement: {measurement_elapsed.total_seconds()}')
+     
+
+   
     # Perform final actions after both temp and os readings
     def complete(self):
-        self.medbot.speak(self.root.config['vital_signs_measurement']['success'][self.root.language])    
         
+        self.medbot.speak_using_file(self.root.config['vital_signs_measurement_recording']['success_recording'][self.root.language])    
+
+        # end = datetime.datetime.now()
+        # elapsed = end - self.root.start
+        # print(elapsed) 
+        # self.root.start = datetime.datetime.now()
+
         self.master.show_vitals_reading_page(self.systolic, self.diastolic, self.pulse_rate, self.temperature, self.oxygen_saturation, self.bp_rating, self.pr_rating, self.temp_rating, self.os_rating)
 
+        # end = datetime.datetime.now()
+        # elapsed = end - self.root.start
+        # print(elapsed) 
+        # self.root.start = datetime.datetime.now()
 
 class VitalsReadingPage(tk.Canvas):
     def __init__(self, root: Root, bot: medbot.Medbot, systolic, diastolic, pulse_rate, temperature, oxygen_saturation,  bp_rating, pr_rating, temp_rating, os_rating,**kwargs):
@@ -612,7 +693,7 @@ class VitalsReadingPage(tk.Canvas):
         text = "TEMPERATURE"
         self.text_label = self.create_text(370, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
 
-        text = "PULSE"
+        text = "PULSE RATE"
         self.text_label = self.create_text(740, 345, text=text, font=("ROBOTO", 12, "bold"), fill="black", justify=tk.CENTER)
 
 
@@ -632,13 +713,21 @@ class VitalsReadingPage(tk.Canvas):
         text = "PRINT RESULT?"
         self.text_label = self.create_text(455, 470, text=text, font=("ROBOTO", 12, "bold"), fill="white")
 
+        global sending_data_start
+        sending_data_start = datetime.datetime.now()
 
         self.medbot.save_reading(self.medbot.user[0], self.systolic, self.diastolic, self.oxygen_saturation, self.pulse_rate, self.temperature)
         
+        global sending_data_end
+        sending_data_end = datetime.datetime.now()
+        sending_data_elapsed = sending_data_end - sending_data_start
+        print(f' Sending_data: {sending_data_elapsed.total_seconds()}')
+       
+
         self.after(1000, self.after_init)
     
     def after_init(self):
-        self.medbot.speak(self.root.config['results_prompt']['prompt'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['results_recording']['prompt_recording'][self.root.language])
 
         self.medbot.speak(self.root.config['results_prompt']['result_bp'][self.root.language].format(str(self.systolic), str(self.diastolic), str(self.bp_rating)))
        
@@ -648,7 +737,8 @@ class VitalsReadingPage(tk.Canvas):
         
         self.medbot.speak(self.root.config['results_prompt']['result_pr'][self.root.language].format(str(self.pulse_rate), str(self.pr_rating)))
 
-        self.medbot.speak(self.root.config['printing']['prompt'][self.root.language])
+
+        self.medbot.speak_using_file(self.root.config['printing_recording']['print_recording'][self.root.language])
         
 
     def on_red_button_click(self):
@@ -726,7 +816,15 @@ class ThankYouPage(tk.Canvas):
         self.after(1000, self.thankyou)
     
     def thankyou(self):   
-        self.medbot.speak(self.root.config['printing']['thank_you_voice'][self.root.language])
+        self.medbot.speak_using_file(self.root.config['printing_recording']['thank_you_voice_recording'][self.root.language])
+        
+
+        global all_process_start
+        global all_process_end 
+        all_process_end = datetime.datetime.now()
+        all_process_elapsed = all_process_end - all_process_start
+        print(f' All process: {all_process_elapsed.total_seconds()}')
+        
         self.medbot.reset_and_logout()
         self.root.show_homepage()
 

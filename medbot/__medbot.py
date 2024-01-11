@@ -41,7 +41,7 @@ class Medbot:
         
         print('1')
         self.reset_arduino()
-        print('2')
+        # print('2')
         self.oximeter = MAX30102()
         print('3')
         self.qrcode_scanner = cv2.VideoCapture(0)
@@ -54,7 +54,7 @@ class Medbot:
         voices = self.speaker.getProperty('voices')
         self.speaker.setProperty('rate', 150)
 
-        self.on_ongoing_bp = False
+        self.on_going_bp = False
 
         button = 38;
         
@@ -252,10 +252,12 @@ class Medbot:
         '''
     #     self.send_command(9)
         self.send_command(4)
+        
     
     def reset_and_logout(self):
         self.user = None
-        self.reset_arduino()
+        print('I was called')
+        
 
     #########################################
     #                                       #
@@ -309,7 +311,28 @@ class Medbot:
             response = self.get_arduino_response()
             print(response)
         temperature = float (response) 
-        return temperature      
+        
+        if temperature > 39:
+            self.get_temperature()
+
+        return temperature 
+
+    
+    # def get_temperature(self):
+    #     self.send_command(11)   
+
+    #     response = self.get_arduino_response() 
+    #     print(response)
+    #     if not response:            
+    #         while not response:
+    #             response = self.get_arduino_response()
+    #             print(response)
+    #     temperature = float (response) 
+        
+    #     if temperature > 39:
+    #         self.get_temperature()
+
+    #     return temperature      
     
     #########################################
     #                                       #
