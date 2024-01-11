@@ -223,8 +223,11 @@ class ScanQRCodePage(tk.Canvas):
 
     def on_qr_code_click(self):
         success = False
-        ready = True
+        ready = False
+        
         last_scaned = datetime.datetime.now()
+        print(success)
+
         while not success:
             if not ready:
                 elapse_time = datetime.datetime.now() - last_scaned
@@ -232,6 +235,7 @@ class ScanQRCodePage(tk.Canvas):
                     ready = True
 
             qr_data = self.medbot.scan_qrcode()
+            print(qr_data)
             credentials = qr_data.split(' ')
             
             if ready and credentials[0] != 'medbot':
@@ -813,8 +817,7 @@ class ThankYouPage(tk.Canvas):
     
     def thankyou(self):   
         self.medbot.speak_using_file(self.root.config['printing_recording']['thank_you_voice_recording'][self.root.language])
-        self.medbot.reset_and_logout()
-        self.root.show_homepage()
+        
 
         global all_process_start
         global all_process_end 
@@ -822,6 +825,8 @@ class ThankYouPage(tk.Canvas):
         all_process_elapsed = all_process_end - all_process_start
         print(f' All process: {all_process_elapsed.total_seconds()}')
         
+        self.medbot.reset_and_logout()
+        self.root.show_homepage()
 
 if __name__ == "__main__":
     bot = medbot.Medbot()

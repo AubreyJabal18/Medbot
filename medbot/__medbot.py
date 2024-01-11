@@ -252,10 +252,12 @@ class Medbot:
         '''
     #     self.send_command(9)
         self.send_command(4)
+        
     
     def reset_and_logout(self):
         self.user = None
-        self.reset_arduino()
+        print('I was called')
+        
 
     #########################################
     #                                       #
